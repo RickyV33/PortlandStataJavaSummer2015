@@ -9,9 +9,11 @@ import java.util.Collection;
  * Created by Rickyy on 7/3/2015.
  */
 public class PhoneBill extends AbstractPhoneBill{
+    public String customer;
+
     @Override
     public String getCustomer() {
-        return null;
+        return customer;
     }
 
     @Override
