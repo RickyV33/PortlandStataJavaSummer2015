@@ -2,8 +2,10 @@ package edu.pdx.cs410J.rv3;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 /**
  * The main class for the CS410J Phone Bill Project
@@ -11,6 +13,7 @@ import java.util.List;
 public class Project1 {
 
   public static void main(String[] args) {
+      Project1 app = new Project1();
       String customer = null;
       String caller = null;
       String callee = null;
@@ -18,13 +21,10 @@ public class Project1 {
       String startTime = null;
       String endDate = null;
       String endTime = null;
-      String print = null;
-      String readMe = null;
-      String [] tag;
-
+      Date start;
+      Date end;
       ArrayList<String> comLineInput;
       boolean verbose = false;
-      int dataIndexStart;
       Class c = AbstractPhoneBill.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
       int argLength = args.length;
 
@@ -44,6 +44,10 @@ public class Project1 {
           verbose = true;
           comLineInput.remove("-print");
       }
+      if (comLineInput.size() < 7) {
+          System.err.println("Missing command line arguments");
+          System.exit(1);
+      }
       for (String var : comLineInput) {
           if (customer == null)
               customer = var;
@@ -59,18 +63,35 @@ public class Project1 {
               endDate = var;
           else if (endTime == null)
               endTime = var;
-          else if (print == null)
-              print = var;
-          else if (readMe == null)
-              readMe = var;
       }
 
+      start = app.parseDateAndTime(startDate + " " + startTime);
+      end = app.parseDateAndTime(endDate + " " + endTime);
+
+
+
       System.out.println(customer + "\n" + caller + "\n" + callee + "\n" +
-              startDate + " " + startTime + "\n" + startDate + " " + endTime);
+              startDate + " " + startTime + "\n" + endDate + " " + endTime);
   }
 
     public void printDescription() {
        System.out.println("This project yada yada ");
+    }
+
+    Date parseDateAndTime(String dateString) {
+        String [] formatStrings = {"MM/dd/y HH:mm", "M/dd/y HH:mm"};
+
+        for (String formatString : formatStrings) {
+            try {
+                System.out.println(new SimpleDateFormat(formatString).parse(dateString));
+                return new SimpleDateFormat(formatString).parse(dateString);
+            }
+            catch (ParseException e) {
+                System.err.println(e);
+                System.exit(1);
+            }
+        }
+        return null;
     }
 
 }
