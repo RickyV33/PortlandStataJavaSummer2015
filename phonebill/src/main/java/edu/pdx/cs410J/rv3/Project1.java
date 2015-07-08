@@ -47,6 +47,17 @@ public class Project1 {
       }
       //Parses the command line for any tags and prioritizes them.
       verbose = app.parseTags(app, comLineInput);
+
+      //If the remaining arguments are less than 7 (not every argument was passed in), exit the program gracefully
+      if (comLineInput.size() <= 6) {
+          System.err.println("Missing command line arguments.");
+          System.exit(1);
+      }
+      else if(comLineInput.size() >= 8) {
+          System.err.println("Too many command line argumetns.");
+          System.exit(1);
+      }
+
       //Assign each index of comLineInput to it's own unique variable to use/understand them easier
       for (String var : comLineInput) {
           if (customer == null)
@@ -102,12 +113,6 @@ public class Project1 {
         if (list.contains("-print")) {
             list.remove("-print");
             return true;
-        }
-
-        //If the remaining arguments are less than 7 (not every argument was passed in), exit the program gracefully
-        if (list.size() < 7) {
-            System.err.println("Missing command line arguments");
-            System.exit(1);
         }
         return false;
     }
