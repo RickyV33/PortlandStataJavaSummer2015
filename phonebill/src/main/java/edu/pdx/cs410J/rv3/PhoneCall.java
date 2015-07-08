@@ -6,7 +6,11 @@ import java.util.Date;
 
 /**
  * The <code>PhoneCall</code> class extends the <code>AbstractPhoneCall</code> class which
- * creates a phone call with the caller's phone number, callee's phone number, start time, and end time.
+ * creates a phone call with the caller's phone number, callee's phone number, start time of the call, and end time of
+ * the call.
+ *
+ * @author Ricky Valencia
+ * @version 1.0
  */
 public class PhoneCall extends AbstractPhoneCall{
     /** Stores the caller's phone number in the format xxx-xxx-xxxx.*/

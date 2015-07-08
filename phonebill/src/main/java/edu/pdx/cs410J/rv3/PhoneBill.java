@@ -10,6 +10,9 @@ import java.util.List;
 /**
  * The <code>PhoneBill</code> class extends the <code>AbstractPhoneBill</code> class which creates
  * a bill consisting of a series of phone calls addressed to one person.
+ *
+ * @author Ricky Valencia
+ * @version 1.0
  */
 public class PhoneBill extends AbstractPhoneBill{
     /**Stores the customer's name that the phone calls belong to.*/

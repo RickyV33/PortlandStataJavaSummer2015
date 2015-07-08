@@ -9,7 +9,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The main class for the CS410J Phone Bill Project
+ * The main class for the CS410J Phone Bill Project that parses command line arguments to make sure they are in the correct
+ * format before creating a <code>PhoneBill</code> and <code>PhoneCall</code> objects of the passed in arguments.
+ *
+ * @author Ricky Valencia
+ * @version 1.0
  */
 public class Project1 {
 
@@ -75,10 +79,18 @@ public class Project1 {
           bill = new PhoneBill(customer);
           bill.addPhoneCall(call);
           //System.out.println("Bill: " + bill.toString());
-          System.out.println("Call: " + call.toString());
+          System.out.println(call.toString());
       }
     }
 
+    /**
+     * Parses the command line arguments and checks for the tags '-print' and '-README'. If the '-print' tag is found,
+     * then it returns true, otherwise false. If the '-README' tag is found, then it will print a description of the
+     * project without parsing the rest of the command line.
+     * @param app An instantiation of the Project1 Class so helper methods within the class can be used.
+     * @param list The list of command line arguments passed in as an <code>ArrayList</code> object.
+     * @return If the '-print' tag is found, it returns true, otherwise false.
+     */
     public boolean parseTags(Project1 app, ArrayList list) {
 
         //If the -README tag exists, run the description method and exit the program
@@ -100,12 +112,27 @@ public class Project1 {
         return false;
     }
 
+    /**
+     * Prints a description of the project by explaining how to use it and what it is.
+     */
     public void printDescription() {
-       System.out.println("This project yada yada ");
+       System.out.println("Author: Ricky Valencia\n Assignment: Project 1\n" +
+               "This program takes in command line arguments which include customer's name, caller phone number, callee\n" +
+               "phone number, the start date and time of the call, and when the call ended. The Order of the arguments is\n" +
+               "important and they can be followed by the optional tags -print and -README, which can be in any order. This\n" +
+               "program will parse the CL arguments and check to make sure they are in the correct format. If the user \n" +
+               "inputs the -print tag then it will print a description of the call. If the user adds the -README tag, then\n" +
+               "it will print a description of the program without executing the rest of the program.");
     }
 
+    /**
+     * Parses the dateString string against two different string formats, MM/dd/yyyy HH:mm and "M/dd/yyyy HH:mm, to make
+     * sure that they were entered in under the correct format. If it's not in the proper format, <code>ParseDateAndTime</code>
+     * will throw a <code>ParseException</code>, give an error message, and exit the program.
+     * @param dateString The date and time string from the command line that will be parsed.
+     */
     public void parseDateAndTime(String dateString) {
-        String [] formatStrings = {"MM/dd/yyyy HH:mm", "M/dd/y HH:mm"};
+        String [] formatStrings = {"MM/dd/yyyy HH:mm", "M/dd/yyyy HH:mm"};
 
         for (String formatString : formatStrings) {
             try {
@@ -120,11 +147,15 @@ public class Project1 {
         }
     }
 
+    /**
+     *Parses the number string against a regex pattern (xxx-xxx-xxxx where x's are numbers) to verify that the phone
+     * number was passed in under the correct format. If it's not in the proper format, <code>ParseTelephone</code>
+     * will print an error message and exit the program.
+     * @param number The phone number from the command line that will be parsed by the method.
+     */
     public void parseTelephone(String number) {
-
-
         Pattern pattern = Pattern.compile("\\d{3}-\\d{3}-\\d{4}");
-        Matcher matcher = pattern.matcher(number);
+        Matcher matcher = pattern.matcher(number); //Check if the phone number is in the format xxx-xxx-xxxx
 
         if (!matcher.matches()) {
             System.err.println("Phone number must be in the format xxx-xxx-xxxx.");
