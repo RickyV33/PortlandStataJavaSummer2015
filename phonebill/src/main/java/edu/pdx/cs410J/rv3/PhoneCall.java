@@ -5,7 +5,7 @@ import edu.pdx.cs410J.AbstractPhoneCall;
 import java.util.Date;
 
 /**
- * Created by Rickyy on 7/3/2015.
+ * Created by Ricky on 7/3/2015.
  */
 public class PhoneCall extends AbstractPhoneCall{
     public String caller;
