@@ -8,17 +8,13 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * The <code>PhoneBill</code> class extends the <code>AbstractPhoneBill</code> class which
- * allows the user to create a bill consisting of a series of phone calls addressed to one person.
+ * The <code>PhoneBill</code> class extends the <code>AbstractPhoneBill</code> class which creates
+ * a bill consisting of a series of phone calls addressed to one person.
  */
 public class PhoneBill extends AbstractPhoneBill{
-    /**
-     * Stores the customer's name that the phone calls belong to
-     */
+    /**Stores the customer's name that the phone calls belong to.*/
     public String customer;
-    /**
-     * Stores the list of all the phone calls made by the customer
-     */
+    /**Stores the list of all the phone calls made by the customer.*/
     public List<PhoneCall> phoneCalls = null;
 
     /**
