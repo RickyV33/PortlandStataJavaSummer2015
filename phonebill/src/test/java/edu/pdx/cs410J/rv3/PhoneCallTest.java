@@ -1,22 +1,33 @@
 package edu.pdx.cs410J.rv3;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
 public class PhoneCallTest extends TestCase {
+    public PhoneCall test = new PhoneCall("CALLER", "CALLEE", "START", "END");
 
-    public void testGetCaller() throws Exception {
-
+    @Test
+    public void testGetCaller() {
+        assertTrue("CALLER".equals(test.getCaller()));
     }
 
-    public void testGetCallee() throws Exception {
-
+    @Test
+    public void testGetCallee() {
+        assertTrue("CALLEE".equals(test.getCallee()));
     }
 
-    public void testGetStartTimeString() throws Exception {
-
+    @Test
+    public void testGetStartTime() {
+        assertTrue("START".equals(test.getStartTimeString()));
     }
 
-    public void testGetEndTimeString() throws Exception {
+    @Test
+    public void testGetEndTime() {
+        assertTrue("END".equals(test.getEndTimeString()));
+    }
 
+    @Test
+    public void testToString() {
+        assertEquals(test.toString(), "Phone call from CALLER to CALLEE from START to END");
     }
 }
