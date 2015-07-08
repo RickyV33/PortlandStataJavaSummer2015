@@ -36,6 +36,10 @@ public class PhoneCall extends AbstractPhoneCall{
         this.endTime = endTime;
     }
 
+    /**
+     * Overrides <code>AbstractPhoneCall</code>'s abstract method <code>getCaller</code> to get the caller's phone number.
+     * @return caller The phone number of the caller as a string from the object.
+     */
     @Override
     public String getCaller() {
         return caller;
