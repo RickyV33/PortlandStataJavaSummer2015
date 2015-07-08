@@ -54,7 +54,7 @@ public class Project1 {
           System.exit(1);
       }
       else if(comLineInput.size() >= 8) {
-          System.err.println("Too many command line argumetns.");
+          System.err.println("Too many command line arguments.");
           System.exit(1);
       }
 
