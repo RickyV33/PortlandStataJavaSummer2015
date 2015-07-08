@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class PhoneBill extends AbstractPhoneBill{
     public String customer;
-    public List<PhoneCall> phoneCalls = new ArrayList<PhoneCall>();
+    public List<PhoneCall> phoneCalls;
 
     public PhoneBill(String customer, List phoneCalls){
         this.customer = new String(customer);
