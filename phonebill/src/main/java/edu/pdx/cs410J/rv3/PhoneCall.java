@@ -55,4 +55,10 @@ public class PhoneCall extends AbstractPhoneCall{
     public String getEndTimeString() {
         return endTime;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
 }

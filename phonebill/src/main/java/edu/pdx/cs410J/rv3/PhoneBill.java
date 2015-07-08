@@ -12,11 +12,15 @@ import java.util.List;
  */
 public class PhoneBill extends AbstractPhoneBill{
     public String customer;
-    public List<PhoneCall> phoneCalls;
+    public List<PhoneCall> phoneCalls = null;
 
     public PhoneBill(String customer, List phoneCalls){
         this.customer = new String(customer);
         this.phoneCalls = new ArrayList<PhoneCall>(phoneCalls);
+    }
+
+    public PhoneBill(String customer) {
+        this.customer = new String(customer);
     }
 
     @Override
@@ -26,6 +30,8 @@ public class PhoneBill extends AbstractPhoneBill{
 
     @Override
     public void addPhoneCall(AbstractPhoneCall call) {
+        if (phoneCalls == null)
+            phoneCalls = new ArrayList<PhoneCall>();
         phoneCalls.add((PhoneCall) call);
     }
 
@@ -33,4 +39,10 @@ public class PhoneBill extends AbstractPhoneBill{
     public Collection getPhoneCalls() {
         return phoneCalls;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
 }
