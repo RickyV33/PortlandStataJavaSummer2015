@@ -20,46 +20,57 @@ public class Project1 {
       String endTime = null;
       String print = null;
       String readMe = null;
-      List<String> tag;
+      String [] tag;
+
+      ArrayList<String> comLineInput;
+      boolean verbose = false;
+      int dataIndexStart;
       Class c = AbstractPhoneBill.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
       int argLength = args.length;
 
-      if (argLength <= 2 || argLength > 0) {
-          tag = new ArrayList<String>();
-          for (String arg : args)
-              tag.add(arg);
-          System.out.println(tag);
-      }
-      else if (argLength >= 7 || argLength <= 9) {
-          for (String arg : args) {
-              if (customer == null)
-                  customer = arg;
-              else if(caller == null)
-                  caller = arg;
-              else if (callee == null)
-                  callee = arg;
-              else if (startDate == null)
-                  startDate = arg;
-              else if (startTime == null)
-                  startTime = arg;
-              else if (endDate == null)
-                  endDate = arg;
-              else if (endTime == null)
-                  endTime = arg;
-              else if (print == null)
-                  print = arg;
-              else if (readMe == null)
-                  readMe = arg;
-          }
-
-      }
-      else {
+      if (argLength == 0) {
           System.err.println("Missing command line arguments");
+          System.exit(1);
+      }
+      comLineInput = new ArrayList<String>();
+      for (int i = 0; i < argLength; ++i) {
+          comLineInput.add(args[i]);
+      }
+      if (comLineInput.contains("-README")) {
+          System.out.println("This project yada yada ");
+          System.exit(2);
+      }
+      if (comLineInput.contains("-print")) {
+          verbose = true;
+          comLineInput.remove("-print");
+      }
+      for (String var : comLineInput) {
+          if (customer == null)
+              customer = var;
+          else if(caller == null)
+              caller = var;
+          else if (callee == null)
+              callee = var;
+          else if (startDate == null)
+              startDate = var;
+          else if (startTime == null)
+              startTime = var;
+          else if (endDate == null)
+              endDate = var;
+          else if (endTime == null)
+              endTime = var;
+          else if (print == null)
+              print = var;
+          else if (readMe == null)
+              readMe = var;
       }
 
       System.out.println(customer + "\n" + caller + "\n" + callee + "\n" +
               startDate + " " + startTime + "\n" + startDate + " " + endTime);
-      System.exit(1);
   }
+
+    public void printDescription() {
+       System.out.println("This project yada yada ");
+    }
 
 }
