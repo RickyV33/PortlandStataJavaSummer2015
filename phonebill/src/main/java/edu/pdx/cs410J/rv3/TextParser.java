@@ -3,9 +3,12 @@ import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.ParserException;
 import edu.pdx.cs410J.PhoneBillParser;
 
+import javax.swing.text.html.parser.Parser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -24,8 +27,8 @@ public class TextParser implements PhoneBillParser {
 
     @Override
     public AbstractPhoneBill parse() throws ParserException {
-        String line;
-        String [] callInfo;
+        ArrayList<String> callInfo = new ArrayList<String>();
+        Project2 parseArgs = new Project2();
 
         if (!file.exists()) {
             try {
@@ -34,22 +37,31 @@ public class TextParser implements PhoneBillParser {
                 e.printStackTrace();
             }
         }
+
         else {
             try {
                 inputFile = new Scanner(file);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            line  = inputFile.nextLine(); //Reads the phone bill customer
-            bill = new PhoneBill(line);
-
-            while ( inputFile.hasNextLine()) {
-                line = inputFile.nextLine();
-                callInfo = line.split(";");
-                bill.addPhoneCall(new PhoneCall(callInfo[0], callInfo[1], callInfo[2], callInfo[3]));
+            if (!inputFile.hasNext())
+                throw new ParserException("File is empty!");
+            bill = new PhoneBill(inputFile.nextLine()); //Reads the phone bill customer
+            while (inputFile.hasNextLine()) {
+                for (String string: inputFile.nextLine().split(";")) {
+                    callInfo.add(string);
+                }
+                try {
+                    parseArgs.parseCLSize(callInfo);
+                    parseArgs.parseTelephone(callInfo.get(0));
+                    parseArgs.parseTelephone(callInfo.get(1));
+                    parseArgs.parseDateAndTime(callInfo.get(2));
+                    parseArgs.parseDateAndTime(callInfo.get(3));
+                }catch (ParserException e) {
+                    throw e;
+                }
+                bill.addPhoneCall(new PhoneCall(callInfo.get(0), callInfo.get(1), callInfo.get(2), callInfo.get(3)));
             }
-            System.out.println(bill.toString());
-
         }
         return bill;
     }

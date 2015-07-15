@@ -3,6 +3,7 @@ package edu.pdx.cs410J.rv3;
 import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.ParserException;
 
+import javax.swing.text.html.parser.Parser;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -56,17 +57,6 @@ public class Project2 {
       app.parseFile(comLineInput);
       verbose = app.parsePrint(comLineInput);
 
-
-      //If the remaining arguments are less than 7 (not every argument was passed in), exit the program gracefully
-      if (comLineInput.size() <= 6) {
-          System.err.println("Missing command line arguments.");
-          System.exit(1);
-      }
-      else if(comLineInput.size() >= 8) {
-          System.err.println("Too many command line arguments.");
-          System.exit(1);
-      }
-
       //Assign each index of comLineInput to it's own unique variable to use/understand them easier
       for (String var : comLineInput) {
           if (customer == null)
@@ -88,19 +78,33 @@ public class Project2 {
       //Parses the data to make sure it's in the correct format
       start = startDate + " " + startTime;
       end = endDate + " " + endTime;
-      app.parseDateAndTime(start);
-      app.parseDateAndTime(end);
-      app.parseTelephone(caller);
-      app.parseTelephone(callee);
+      try {
+          app.parseCLSize(comLineInput);
+          app.parseDateAndTime(start);
+          app.parseDateAndTime(end);
+          app.parseTelephone(caller);
+          app.parseTelephone(callee);
+      } catch (ParserException e) {
+          System.err.println(e);
+          System.exit(1);
+      }
 
       //If the user inputs the tag -print, then it will print here
       if (verbose) {
           call = new PhoneCall(caller, callee, start, end);
           bill = new PhoneBill(customer);
           bill.addPhoneCall(call);
-          //System.out.println("Bill: " + bill.toString());
           System.out.println(call.toString());
       }
+    }
+
+    public void parseCLSize(ArrayList<String> comLineInput) throws ParserException{
+        if (comLineInput.size() <= 6) {
+            throw new ParserException("Missing command line arguments.");
+        }
+        else if(comLineInput.size() >= 8) {
+            throw new ParserException("Too many command line arguments.");
+        }
     }
 
     /**
@@ -122,6 +126,7 @@ public class Project2 {
 
     public void parseFile(ArrayList list) {
         File file;
+        PhoneBill test;
 
         if (list.contains("-textFile")) {
             int filenameIndex = list.indexOf("-textFile") + 1;
@@ -131,10 +136,17 @@ public class Project2 {
             list.remove(filename);
             TextParser contents = new TextParser(filename);
             try {
-                contents.parse();
+                test = (PhoneBill) contents.parse();
+                TextDumper dump = new TextDumper(filename);
+                try {
+                    dump.dump(test);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             catch (ParserException e) {
-                System.out.println("Unable to parse!");
+                System.err.println(e);
+                System.exit(1);
             }
 
         }
@@ -167,7 +179,7 @@ public class Project2 {
      * will throw a <code>ParseException</code>, give an error message, and exit the program.
      * @param dateString The date and time string from the command line that will be parsed.
      */
-    public void parseDateAndTime(String dateString) {
+    public void parseDateAndTime(String dateString) throws ParserException{
         String [] formatStrings = {"MM/dd/yyyy HH:mm", "M/dd/yyyy HH:mm"};
 
         for (String formatString : formatStrings) {
@@ -177,8 +189,10 @@ public class Project2 {
                 Date date = format.parse(dateString);
             }
             catch (ParseException e) {
-                System.err.println("Date must be in the format MM/dd/yyyy hh:mm.");
-                System.exit(1);
+                throw new ParserException("Date must be in the format MM/dd/yyyy hh:mm.");
+                //System.err.println("Date must be in the format MM/dd/yyyy hh:mm.");
+                //System.err.println(e);
+                //System.exit(1);
             }
         }
     }
@@ -189,14 +203,15 @@ public class Project2 {
      * will print an error message and exit the program.
      * @param number The phone number from the command line that will be parsed by the method.
      */
-    public void parseTelephone(String number) {
+    public void parseTelephone(String number) throws ParserException{
 
         Pattern pattern = Pattern.compile("\\d{3}-\\d{3}-\\d{4}");
         Matcher matcher = pattern.matcher(number); //Check if the phone number is in the format xxx-xxx-xxxx
 
         if (!matcher.matches()) {
-            System.err.println("Phone number must be in the format xxx-xxx-xxxx.");
-            System.exit(1);
+            throw new ParserException("Phone number must be in the format xxx-xxx-xxxx");
+            //System.err.println("Phone number must be in the format xxx-xxx-xxxx.");
+            //System.exit(1);
         }
     }
 }
