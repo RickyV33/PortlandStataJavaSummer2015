@@ -1,10 +1,15 @@
 package edu.pdx.cs410J.rv3;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
+import edu.pdx.cs410J.ParserException;
+
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,10 +20,12 @@ import java.util.regex.Pattern;
  * @author Ricky Valencia
  * @version 1.0
  */
-public class Project1 {
+
+
+public class Project2 {
 
   public static void main(String[] args) {
-      Project1 app = new Project1(); //Used to instantiate the main class to use helper methods
+      Project2 app = new Project2(); //Used to instantiate the main class to use helper methods
       PhoneBill bill; //Holds the phone bill for the user
       PhoneCall call; //Holds the phone call for the user
       String customer = null; //Holds the customers name
@@ -30,23 +37,25 @@ public class Project1 {
       String endTime = null; //Holds the end time of the call
       String start; //Holds the concatenation of the start date and start time
       String end; //Holds the concatenation of the end date and end time
-      ArrayList<String> comLineInput; //Holds the array of command line arguments
+      ArrayList<String> comLineInput = new ArrayList<String>(); //Holds the array of command line arguments
       boolean verbose = false; //Holds whether the '-print' tag was used
       Class c = AbstractPhoneBill.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
-      int argLength = args.length; //Holds the number of argumetns passed in
+      int argLength = args.length; //Holds the number of arguments passed in
 
       //If no command line arguments are passed in, gracefully exit
       if (argLength == 0) {
           System.err.println("Missing command line arguments");
           System.exit(1);
       }
-      comLineInput = new ArrayList<String>(); //Instantiate the command line arguments into an array
       //For each argument passed into the CL, add it to the array
-      for (int i = 0; i < argLength; ++i) {
-          comLineInput.add(args[i]);
+      for (String arg: args) {
+          comLineInput.add(arg);
       }
       //Parses the command line for any tags and prioritizes them.
-      verbose = app.parseTags(app, comLineInput);
+      app.parseReadMe(app, comLineInput);
+      app.parseFile(comLineInput);
+      verbose = app.parsePrint(comLineInput);
+
 
       //If the remaining arguments are less than 7 (not every argument was passed in), exit the program gracefully
       if (comLineInput.size() <= 6) {
@@ -98,23 +107,45 @@ public class Project1 {
      * Parses the command line arguments and checks for the tags '-print' and '-README'. If the '-print' tag is found,
      * then it returns true, otherwise false. If the '-README' tag is found, then it will print a description of the
      * project without parsing the rest of the command line.
-     * @param app An instantiation of the Project1 Class so helper methods within the class can be used.
+     * @param app An instantiation of the Project2 Class so helper methods within the class can be used.
      * @param list The list of command line arguments passed in as an <code>ArrayList</code> object.
      * @return If the '-print' tag is found, it returns true, otherwise false.
      */
-    public boolean parseTags(Project1 app, ArrayList list) {
+    public boolean parsePrint(ArrayList list) {
+        //If the -print tag exists, set verbose to true and remove it from the array so only the arguments are left
+        if (list.contains("-print")) {
+            list.remove("-print"); //Removes the tag from the list of arguments
+            return true;
+        }
+        return false;
+    }
 
+    public void parseFile(ArrayList list) {
+        File file;
+
+        if (list.contains("-textFile")) {
+            int filenameIndex = list.indexOf("-textFile") + 1;
+            String filename = (String) list.get(filenameIndex);
+            //Removes the tag from the list of arguments
+            list.remove("-textFile");
+            list.remove(filename);
+            TextParser contents = new TextParser(filename);
+            try {
+                contents.parse();
+            }
+            catch (ParserException e) {
+                System.out.println("Unable to parse!");
+            }
+
+        }
+    }
+
+    public void parseReadMe(Project2 app, ArrayList list) {
         //If the -README tag exists, run the description method and exit the program
         if (list.contains("-README")) {
             app.printDescription();
             System.exit(1);
         }
-        //If the -print tag exists, set verbose to true and remove it from the array so only the arguments are left
-        if (list.contains("-print")) {
-            list.remove("-print");
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -159,6 +190,7 @@ public class Project1 {
      * @param number The phone number from the command line that will be parsed by the method.
      */
     public void parseTelephone(String number) {
+
         Pattern pattern = Pattern.compile("\\d{3}-\\d{3}-\\d{4}");
         Matcher matcher = pattern.matcher(number); //Check if the phone number is in the format xxx-xxx-xxxx
 

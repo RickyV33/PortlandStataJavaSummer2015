@@ -23,6 +23,7 @@ public class PhoneCall extends AbstractPhoneCall{
     public String endTime;
 
     /**
+     *
      * Creates a new <code>PhoneCall</code> object using a caller, callee, start time, and end time as the initial times.
      * @param caller The phone number of the person who made the phone call.
      * @param callee The phone number of the person who received the phone call
@@ -35,7 +36,6 @@ public class PhoneCall extends AbstractPhoneCall{
         this.startTime = startTime;
         this.endTime = endTime;
     }
-
     /**
      * Overrides <code>AbstractPhoneCall</code>'s abstract method <code>getCaller</code> to get the caller's phone number.
      * @return caller The phone number of the caller as a string from the object.
