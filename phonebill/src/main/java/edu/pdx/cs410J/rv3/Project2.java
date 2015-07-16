@@ -210,7 +210,7 @@ public class Project2 {
     }
 
     /**
-     * Prints a description of the project by explaining how to use it and what it is.
+     * Prints a description of the project by explaining how to use it, what it is, and any new features.
      */
     public void printDescription() {
        System.out.println("Author: Ricky Valencia\n Assignment: Project 1\n" +
