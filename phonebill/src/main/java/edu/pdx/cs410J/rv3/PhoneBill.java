@@ -18,7 +18,7 @@ public class PhoneBill extends AbstractPhoneBill{
     /**Stores the customer's name that the phone calls belong to.*/
     public String customer;
     /**Stores the list of all the phone calls made by the customer.*/
-    public List<PhoneCall> phoneCalls = null;
+    public ArrayList<PhoneCall> phoneCalls = null;
 
     /**
      * Creates a new <code>PhoneBill</code> object using a customers name and a <code>List</code> of phone calls already existing.
@@ -62,10 +62,10 @@ public class PhoneBill extends AbstractPhoneBill{
     /**
      * Overrides <code>AbstractPhoneBill</code>'s abstract method <code>getPhoneCalls</code> to return the list of
      * phone calls.
-     * @return The list of phone calls as a collection.
+     * @return The list of phone calls as a ArrayList.
      */
     @Override
-    public Collection getPhoneCalls() {
+    public ArrayList <PhoneCall> getPhoneCalls() {
         return phoneCalls;
     }
 
