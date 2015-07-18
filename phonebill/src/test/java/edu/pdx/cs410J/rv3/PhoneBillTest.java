@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class PhoneBillTest extends TestCase {
-    PhoneBill test = new PhoneBill("RICKY", new ArrayList<PhoneCall>());
+    PhoneBill test = new PhoneBill("RICKY");
 
     @Test
     public void testGetCustomer() throws Exception {
@@ -26,7 +26,7 @@ public class PhoneBillTest extends TestCase {
     }
 
     @Test
-    public void testGetPhoneCallsWithTwoCalls(){
+    public void testGetPhoneCallsWithTwoCalls() {
         test.addPhoneCall(new PhoneCall("CALLER", "CALLEE", "START", "END"));
         test.addPhoneCall(new PhoneCall("CALLER", "CALLEE", "START", "END"));
         assertEquals("RICKY's phone bill with 2 phone calls", (test.toString()));
