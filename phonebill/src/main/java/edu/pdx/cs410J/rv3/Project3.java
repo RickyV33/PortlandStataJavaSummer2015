@@ -44,7 +44,7 @@ public class Project3 {
 
     private void start(String[] args) {
         Class c = AbstractPhoneBill.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
-        PhoneCall call; //Holds the phone call for the user
+        PhoneCall call = null; //Holds the phone call for the user
         ArrayList<String> comLineInput = new ArrayList<>(); //Holds the array of command line arguments
         boolean verbose; //Holds whether the '-print' tag was used
         boolean hasFile; //Holds whether the user used the -textFile tag with an external file
@@ -57,7 +57,12 @@ public class Project3 {
         parseCLSize(comLineInput, 7);
         customer = comLineInput.get(0);
         comLineInput.remove(0); //Removes the customer name from the list
-        call = (PhoneCall) parsePhoneCall(comLineInput);
+        try {
+            call = (PhoneCall) parsePhoneCall(comLineInput);
+        } catch (ParserException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
         manageBill(call, customer);
 
         //If the user inputs the -textFile tag, then write the bill to the file
@@ -132,7 +137,7 @@ public class Project3 {
                 bill = (PhoneBill) contents.parse();
                 return true;
             } catch (ParserException e) {
-                System.err.println(e);
+                System.err.println(e.getMessage());
                 System.exit(1);
             }
         }
@@ -155,7 +160,7 @@ public class Project3 {
         return false;
     }
 
-    public AbstractPhoneCall parsePhoneCall(ArrayList<String> call) {
+    public AbstractPhoneCall parsePhoneCall(ArrayList<String> call) throws ParserException {
         String caller; //Holds the caller's phone number
         String callee; //Holds the callee's phone number
         String start; //Holds the concatenation of the start date and start time
@@ -177,12 +182,8 @@ public class Project3 {
             parseDateAndTime(end);
             return new PhoneCall(caller, callee, start, end);
         } catch (ParserException e) {
-            System.err.println(e);
-            System.exit(1);
+            throw e;
         }
-
-
-        return null;
     }
 
     /**
@@ -240,9 +241,6 @@ public class Project3 {
                 Date date = format.parse(dateString);
             } catch (ParseException e) {
                 throw new ParserException("Date must be in the format MM/dd/yyyy hh:mm.");
-                //System.err.println("Date must be in the format MM/dd/yyyy hh:mm.");
-                //System.err.println(e);
-                //System.exit(1);
             }
         }
     }
@@ -259,7 +257,8 @@ public class Project3 {
         try {
             dump.dump(bill);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
     }
 

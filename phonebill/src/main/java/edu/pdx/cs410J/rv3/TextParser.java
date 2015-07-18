@@ -71,7 +71,11 @@ public class TextParser implements PhoneBillParser {
                 callInfo = new ArrayList<>(); //Clear out callInfo by instantiating a new object
                 Collections.addAll(callInfo, inputFile.nextLine().split(";"));
                 parseArgs.parseCLSize(callInfo, 4);
-                parseArgs.parsePhoneCall(callInfo);
+                try {
+                    parseArgs.parsePhoneCall(callInfo);
+                } catch (ParserException e) {
+                    throw e;
+                }
                 //Adds a Phone Call object to the bill from the callInfo List
                 bill.addPhoneCall(new PhoneCall(callInfo.get(0), callInfo.get(1), callInfo.get(2), callInfo.get(3)));
             }
