@@ -11,20 +11,20 @@ public class AboutEquality {
 	public void sameObject() {
 		Object a = new Object();
 		Object b = a;
-		assertEquals(a == b, __);
+		assertEquals(a == b, true);
 	}
 	
 	@Koan
 	public void equalObject() {
 		Integer a = new Integer(1);
 		Integer b = new Integer(1);
-		assertEquals(a.equals(b), __);
-		assertEquals(b.equals(a), __);
+		assertEquals(a.equals(b), true);
+		assertEquals(b.equals(a), true);
 	}
 	
 	@Koan 
 	public void noObjectShouldBeEqualToNull() {
-		assertEquals(new Object().equals(null), __);
+		assertEquals(new Object().equals(null), false);
 	}
 	
 	static class Car {
@@ -35,18 +35,28 @@ public class AboutEquality {
 		public Car(String s, int p) {
 			name = s; horsepower = p;
 		}
+
 		@Override
-		public boolean equals(Object other) {
+		public boolean equals(Object o) {
 			// Change this implementation to match the equals contract
 			// Car objects with same horsepower and name values should be considered equal
 			// http://download.oracle.com/javase/6/docs/api/java/lang/Object.html#equals(java.lang.Object)
-			return false;
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			Car car = (Car) o;
+
+			if (horsepower != car.horsepower) return false;
+			return name.equals(car.name);
+
 		}
-		
+
 		@Override
 		public int hashCode() {
 			// see koan ownHashCode
-			return super.hashCode();
+			int result = name.hashCode();
+			result = 31 * result + horsepower;
+			return result;
 		}
 	}
 	@Koan 
@@ -113,8 +123,8 @@ public class AboutEquality {
 	public void ownHashCodeImplementationPartTwo() {
 		Chicken chicken1 = new Chicken(); chicken1.color = "black";
 		Chicken chicken2 = new Chicken();
-		assertEquals(chicken1.equals(chicken2), __);
-		assertEquals(chicken1.hashCode() == chicken2.hashCode(), __);
+		assertEquals(chicken1.equals(chicken2), false);
+		assertEquals(chicken1.hashCode() == chicken2.hashCode(), true);
 		// Does this still fit the hashCode contract? Why?
 		// If it's valid why is this still not a good idea?
 	}
