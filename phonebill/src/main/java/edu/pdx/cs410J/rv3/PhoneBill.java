@@ -4,6 +4,8 @@ import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.AbstractPhoneCall;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * The <code>PhoneBill</code> class extends the <code>AbstractPhoneBill</code> class which creates
@@ -20,7 +22,7 @@ public class PhoneBill extends AbstractPhoneBill {
     /**
      * Stores the list of all the phone calls made by the customer.
      */
-    public ArrayList<PhoneCall> phoneCalls = null;
+    public ArrayList<PhoneCall> phoneCalls;
 
     /**
      * Creates a new <code>PhoneBill</code> object using only the customers name.
@@ -49,8 +51,9 @@ public class PhoneBill extends AbstractPhoneBill {
      */
     @Override
     public void addPhoneCall(AbstractPhoneCall call) {
-        if (phoneCalls == null)
+        if (phoneCalls == null) {
             phoneCalls = new ArrayList<>();
+        }
         phoneCalls.add((PhoneCall) call);
     }
 
@@ -62,6 +65,7 @@ public class PhoneBill extends AbstractPhoneBill {
      */
     @Override
     public ArrayList<PhoneCall> getPhoneCalls() {
+        Collections.sort(phoneCalls);
         return phoneCalls;
     }
 

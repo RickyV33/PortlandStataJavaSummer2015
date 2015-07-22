@@ -39,7 +39,7 @@ public class TextDumper implements PhoneBillDumper {
     @Override
     public void dump(AbstractPhoneBill bill) throws IOException {
         PrintWriter writer;
-        ArrayList<PhoneCall> callList = new ArrayList<>((((PhoneBill) bill).getPhoneCalls()));
+        ArrayList<PhoneCall> callList = ((PhoneBill) bill).getPhoneCalls();
 
         try {
             writer = new PrintWriter(filename);

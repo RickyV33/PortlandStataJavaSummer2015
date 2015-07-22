@@ -5,6 +5,7 @@ import edu.pdx.cs410J.AbstractPhoneCall;
 import edu.pdx.cs410J.ParserException;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Project4 {
         textFile = parseFile(comLineInput);
         prettyFile = parsePretty(comLineInput);
         verbose = parsePrint(comLineInput);
-        parseCLSize(comLineInput, 7);
+        parseCLSize(comLineInput, 9);
         customer = comLineInput.get(0);
         comLineInput.remove(0); //Removes the customer name from the list
         try {
@@ -67,9 +68,16 @@ public class Project4 {
             writeToFile(textFile);
         }
         if (prettyFile != null) {
-            // printer = new PrettyPrinter(prettyFile);
-            // printer.dump(bill);
-            System.out.println("Print pretty");
+            printer = new PrettyPrinter(prettyFile);
+            if (prettyFile.equals("-")) {
+                printer.dumpStandardOut(bill);
+            } else {
+                try {
+                    printer.dump(bill);
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
         }
         //If the user inputs the tag -print, then it will print here
         if (verbose) {
@@ -191,16 +199,15 @@ public class Project4 {
             start = call.get(2);
             end = call.get(3);
         } else {
-            start = call.get(2) + " " + call.get(3);
-            end = call.get(4) + " " + call.get(5);
+            start = call.get(2) + " " + call.get(3) + " " + call.get(4);
+            end = call.get(5) + " " + call.get(6) + " " + call.get(7);
         }
         try {
             parseTelephone(caller);
             parseTelephone(callee);
-            parseDateAndTime(start);
-            parseDateAndTime(end);
-            Date startDate =
-            return new PhoneCall(caller, callee, start, end);
+            Date startDate = parseDateAndTime(start);
+            Date endDate = parseDateAndTime(end);
+            return new PhoneCall(caller, callee, startDate, endDate);
         } catch (ParserException e) {
             throw e;
         }
@@ -217,7 +224,7 @@ public class Project4 {
      */
     public void parseCLSize(ArrayList<String> comLineInput, int size) {
         if (comLineInput.size() < size) {
-            System.err.println("Missing command lnie arguments.");
+            System.err.println("Missing command line arguments.");
             System.exit(1);
         } else if (comLineInput.size() > size) {
             System.err.println("Too many command line arguments.");
@@ -251,17 +258,15 @@ public class Project4 {
      *
      * @param dateString The date and time string from the command line that will be parsed.
      */
-    public void parseDateAndTime(String dateString) throws ParserException {
-        String[] formatStrings = {"MM/dd/yyyy HH:mm a", "M/dd/yyyy HH:mm a"};
+    public Date parseDateAndTime(String dateString) throws ParserException {
+        dateString = dateString.replace("pm", "PM").replace("am", "AM");
 
-        for (String formatString : formatStrings) {
-            try {
-                SimpleDateFormat format = new SimpleDateFormat(formatString);
-                format.setLenient(false);
-                Date date = format.parse(dateString);
-            } catch (ParseException e) {
-                throw new ParserException("Date must be in the format MM/dd/yyyy hh:mm.");
-            }
+        try {
+            DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+            format.setLenient(false);
+            return format.parse(dateString);
+        } catch (ParseException e) {
+            throw new ParserException("Date must be in the format MM/dd/yyyy hh:mm (am/pm).");
         }
     }
 
@@ -272,9 +277,8 @@ public class Project4 {
      */
     private void writeToFile(String filename) {
 
-        TextDumper dump = new TextDumper(filename);
         try {
-            dump.dump(bill);
+            new TextDumper(filename).dump(bill);
         } catch (IOException e) {
             System.err.println(e.getMessage());
             System.exit(1);

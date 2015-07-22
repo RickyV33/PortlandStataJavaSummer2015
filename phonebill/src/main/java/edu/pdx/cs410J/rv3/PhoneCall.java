@@ -13,17 +13,16 @@ import java.util.Date;
  * @author Ricky Valencia
  * @version 1.0
  */
-public class PhoneCall extends AbstractPhoneCall implements Comparable {
+public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall> {
     /** Stores the caller's phone number in the format xxx-xxx-xxxx.*/
     private String caller;
     /**Stores the callee's phone number in the format xxx-xxx-xxxx.*/
     private String callee;
-    /**Stores the start date and time of the phone call in the format MM/dd/yyyy hh:mm.*/
-    private String startTimeString;
-    /**Stores the end date and time of the phone call in the format MM/dd/yyyy hh:mm.*/
-    private String endTimeString;
-
+    /**
+     * Stores the start date and time of the phone call in the format MM/dd/yyyy hh:mm (am/pm).
+     */
     private Date startTime;
+    /**Stores the end date and time of the phone call in the format MM/dd/yyyy hh:mm (am/pm).*/
     private Date endTime;
 
 
@@ -82,12 +81,12 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable {
 
     @Override
     public Date getEndTime() {
-        return super.getEndTime();
+        return endTime;
     }
 
     @Override
     public Date getStartTime() {
-        return super.getStartTime();
+        return startTime;
     }
 
     /**
@@ -101,31 +100,15 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public int compareTo(PhoneCall that) {
+        Date startTime = that.getStartTime();
+        String caller = that.getCaller();
 
-        PhoneCall phoneCall = (PhoneCall) o;
+        //Compares the begin time
+        if (this.startTime.equals(startTime)) {
+            return (this.caller.compareTo(caller));
+        }
 
-        if (caller != null ? !caller.equals(phoneCall.caller) : phoneCall.caller != null) return false;
-        if (callee != null ? !callee.equals(phoneCall.callee) : phoneCall.callee != null) return false;
-        if (startTime != null ? !startTime.equals(phoneCall.startTime) : phoneCall.startTime != null) return false;
-        return !(endTime != null ? !endTime.equals(phoneCall.endTime) : phoneCall.endTime != null);
-
+        return this.startTime.compareTo(startTime);
     }
-
-    @Override
-    public int hashCode() {
-        int result = caller != null ? caller.hashCode() : 0;
-        result = 31 * result + (callee != null ? callee.hashCode() : 0);
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
-
 }
