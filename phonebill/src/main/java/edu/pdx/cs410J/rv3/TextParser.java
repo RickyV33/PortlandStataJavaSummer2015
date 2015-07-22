@@ -47,7 +47,7 @@ public class TextParser implements PhoneBillParser {
         ArrayList<String> callInfo;
         Scanner inputFile = null;
         PhoneBill bill = null;
-        Project3 parseArgs = new Project3();
+        Project4 parseArgs = new Project4();
         File file = new File(filename);
 
         if (!file.exists()) {

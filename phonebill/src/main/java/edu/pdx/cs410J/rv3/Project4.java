@@ -22,14 +22,8 @@ import java.util.regex.Pattern;
  */
 
 
-public class Project3 {
-    /**
-     * Holds the name of the file if it exists
-     */
-    private String filename;
-
+public class Project4 {
     private PhoneBill bill;
-
 
     public static void main(String[] args) {
 
@@ -39,7 +33,7 @@ public class Project3 {
             System.exit(1);
         }
 
-        new Project3().start(args);
+        new Project4().start(args);
     }
 
     private void start(String[] args) {
@@ -47,12 +41,15 @@ public class Project3 {
         PhoneCall call = null; //Holds the phone call for the user
         ArrayList<String> comLineInput = new ArrayList<>(); //Holds the array of command line arguments
         boolean verbose; //Holds whether the '-print' tag was used
-        boolean hasFile; //Holds whether the user used the -textFile tag with an external file
+        String textFile; //Holds whether the user used the -textFile tag with an external file
+        String prettyFile; //Holds the name of the pretty file or if it's going to print to the output stream
         String customer; //Holds the name of the customer
-        Collections.addAll(comLineInput, args);
+        Collections.addAll(comLineInput, args); //Adds the command line argumetns into the ArrayList comLineInput
+        PrettyPrinter printer;
 
         parseReadMe(comLineInput);
-        hasFile = parseFile(comLineInput);
+        textFile = parseFile(comLineInput);
+        prettyFile = parsePretty(comLineInput);
         verbose = parsePrint(comLineInput);
         parseCLSize(comLineInput, 7);
         customer = comLineInput.get(0);
@@ -66,12 +63,18 @@ public class Project3 {
         manageBill(call, customer);
 
         //If the user inputs the -textFile tag, then write the bill to the file
-        if (hasFile)
-            writeToFile(bill);
-
+        if (textFile != null) {
+            writeToFile(textFile);
+        }
+        if (prettyFile != null) {
+            // printer = new PrettyPrinter(prettyFile);
+            // printer.dump(bill);
+            System.out.println("Print pretty");
+        }
         //If the user inputs the tag -print, then it will print here
-        if (verbose)
+        if (verbose) {
             System.out.println(call.toString());
+        }
     }
 
     private void manageBill(AbstractPhoneCall call, String customer) {
@@ -122,26 +125,28 @@ public class Project3 {
      * doesn't interfere with the parsing of the new phone call. If the tag doesn't exist, then it returns null.
      *
      * @param list Stores the command line arguments being passed in.
-     * @return Returns null if the tag does not exist, returns a <code>PhoneBill</code> object containing the information
+     * @return Returns null if the tag does not exist, returns the name of the file to be written to otherwise
      * from the text file if the tag exists. It can still return null if the file does not exist but the tag was still present.
      */
-    private boolean parseFile(ArrayList list) {
+    private String parseFile(ArrayList<String> list) {
+        int fileNameIndex;
+
         if (list.contains("-textFile")) {
-            int filenameIndex = list.indexOf("-textFile") + 1;
-            filename = (String) list.get(filenameIndex);
+            fileNameIndex = list.indexOf("-textFile") + 1;
+            String filename = list.get(fileNameIndex);
             //Removes the tag and filename from the list of arguments
             list.remove("-textFile");
             list.remove(filename);
             TextParser contents = new TextParser(filename);
             try {
                 bill = (PhoneBill) contents.parse();
-                return true;
+                return filename;
             } catch (ParserException e) {
                 System.err.println(e.getMessage());
                 System.exit(1);
             }
         }
-        return false;
+        return null;
     }
 
     /**
@@ -158,6 +163,20 @@ public class Project3 {
             return true;
         }
         return false;
+    }
+
+    private String parsePretty(ArrayList<String> list) {
+        int fileNameIndex;
+        String prettyFile;
+
+        if (list.contains("-pretty")) {
+            fileNameIndex = list.indexOf("-pretty") + 1;
+            prettyFile = list.get(fileNameIndex);
+            list.remove("-pretty");
+            list.remove(prettyFile);
+            return prettyFile;
+        }
+        return null;
     }
 
     public AbstractPhoneCall parsePhoneCall(ArrayList<String> call) throws ParserException {
@@ -180,6 +199,7 @@ public class Project3 {
             parseTelephone(callee);
             parseDateAndTime(start);
             parseDateAndTime(end);
+            Date startDate =
             return new PhoneCall(caller, callee, start, end);
         } catch (ParserException e) {
             throw e;
@@ -232,7 +252,7 @@ public class Project3 {
      * @param dateString The date and time string from the command line that will be parsed.
      */
     public void parseDateAndTime(String dateString) throws ParserException {
-        String[] formatStrings = {"MM/dd/yyyy HH:mm", "M/dd/yyyy HH:mm"};
+        String[] formatStrings = {"MM/dd/yyyy HH:mm a", "M/dd/yyyy HH:mm a"};
 
         for (String formatString : formatStrings) {
             try {
@@ -248,10 +268,9 @@ public class Project3 {
     /**
      * This method writes the contents of bill into filename in the correct format.
      *
-     * @param bill Holds the <code>PhoneBill</code> object that is going to be written into the file. It includes a list
-     *             of <code>PhoneCall</code>s in it that are written also.
+     * @param filename Holds the name of the text file that the <code>PhoneBill</code> will be written to.
      */
-    private void writeToFile(PhoneBill bill) {
+    private void writeToFile(String filename) {
 
         TextDumper dump = new TextDumper(filename);
         try {
