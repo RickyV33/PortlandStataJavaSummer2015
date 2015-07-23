@@ -7,7 +7,6 @@ import edu.pdx.cs410J.ParserException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -23,7 +22,7 @@ import java.util.regex.Pattern;
  */
 
 
-public class Project4 {
+public class Project3 {
     /**
      * Holds the phone bill that will be handled throughout the entire program
      */
@@ -37,7 +36,7 @@ public class Project4 {
             System.exit(1);
         }
 
-        new Project4().start(args);
+        new Project3().start(args);
     }
 
     private void start(String[] args) {

@@ -7,11 +7,8 @@ import edu.pdx.cs410J.PhoneBillParser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -51,7 +48,7 @@ public class TextParser implements PhoneBillParser {
         Scanner inputFile = null;
         PhoneBill bill = null;
         PhoneCall call;
-        Project4 parseArgs = new Project4();
+        Project3 parseArgs = new Project3();
         File file = new File(filename);
 
         if (!file.exists()) {
