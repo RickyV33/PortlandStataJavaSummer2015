@@ -50,7 +50,7 @@ public class TextParser implements PhoneBillParser {
         ArrayList<String> callInfo;
         Scanner inputFile = null;
         PhoneBill bill = null;
-        PhoneCall call = null;
+        PhoneCall call;
         Project4 parseArgs = new Project4();
         File file = new File(filename);
 
@@ -74,7 +74,7 @@ public class TextParser implements PhoneBillParser {
             while (inputFile.hasNextLine()) {
                 callInfo = new ArrayList<>(); //Clear out callInfo by instantiating a new object
                 Collections.addAll(callInfo, inputFile.nextLine().split(";"));
-                parseArgs.parseCLSize(callInfo, 4);
+                parseArgs.parseCLSize(callInfo, 4); //Make sure there are only 4 total string objects in the file per line
                 try {
                     call = (PhoneCall) parseArgs.parsePhoneCall(callInfo);
                 } catch (ParserException e) {

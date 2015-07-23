@@ -24,6 +24,9 @@ import java.util.regex.Pattern;
 
 
 public class Project4 {
+    /**
+     * Holds the phone bill that will be handled throughout the entire program
+     */
     private PhoneBill bill;
 
     public static void main(String[] args) {
@@ -45,8 +48,8 @@ public class Project4 {
         String textFile; //Holds whether the user used the -textFile tag with an external file
         String prettyFile; //Holds the name of the pretty file or if it's going to print to the output stream
         String customer; //Holds the name of the customer
-        Collections.addAll(comLineInput, args); //Adds the command line argumetns into the ArrayList comLineInput
-        PrettyPrinter printer;
+        Collections.addAll(comLineInput, args); //Adds the command line arguments into the ArrayList comLineInput
+        PrettyPrinter printer; //Stores a PrettyPrinter object in case the user wants to print their calls
 
         parseReadMe(comLineInput);
         textFile = parseFile(comLineInput);
@@ -67,12 +70,15 @@ public class Project4 {
         if (textFile != null) {
             writeToFile(textFile);
         }
+
+        //Check if the user used the -pretty tag. Display the bill if they did
         if (prettyFile != null) {
-            printer = new PrettyPrinter(prettyFile);
             if (prettyFile.equals("-")) {
+                printer = new PrettyPrinter();
                 printer.dumpStandardOut(bill);
             } else {
                 try {
+                    printer = new PrettyPrinter(prettyFile);
                     printer.dump(bill);
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
@@ -85,6 +91,14 @@ public class Project4 {
         }
     }
 
+    /**
+     * This method checks if the bill manages a phone call that is being sent to the bill. If there are no phone calls
+     * in the bill initially, then it adds it. If the customers from the new call and the current bill don't match, then
+     * it throws an error.
+     *
+     * @param call     The call that is being inserted into the bill.
+     * @param customer The name of the new customer if there was no bill to begin with.
+     */
     private void manageBill(AbstractPhoneCall call, String customer) {
         if (bill == null) {
             bill = new PhoneBill(customer);
@@ -123,7 +137,8 @@ public class Project4 {
                 "program will parse the CL arguments and check to make sure they are in the correct format. If the user \n" +
                 "inputs the -print tag then it will print a description of the call. If the user adds the -README tag, then\n" +
                 "it will print a description of the program without executing the rest of the program. It can read and write\n " +
-                "the phone call to the file if the -textFile tag exists with a filename.");
+                "the phone call to the file if the -textFile tag exists with a filename. Now, it can use a -pretty tag that" +
+                "will display the contents of the phone bill in a text file or the output stream in a neat, pretty format.");
     }
 
     /**
@@ -173,6 +188,13 @@ public class Project4 {
         return false;
     }
 
+    /**
+     * This method takes in the command line arguments as an argument and checks to see if it has the "-pretty" tag. If
+     * it does, then it'll extract the filename, then remove the tag and the filename from the list of command line arguments.
+     *
+     * @param list Stores the command line arguments passed into the program.
+     * @return Returns the name of the file that <code>PrettyPrinter</code> will print to.
+     */
     private String parsePretty(ArrayList<String> list) {
         int fileNameIndex;
         String prettyFile;
@@ -187,6 +209,14 @@ public class Project4 {
         return null;
     }
 
+    /**
+     * This method takes in a list of strings that hold all the information for a phone call. It then parses each string
+     * to see if it is in the proper format.
+     *
+     * @param call Stores the list of arguments used for a phone call
+     * @return Returns a new <code>PhoneCall</code> object if all the arguments are valid.
+     * @throws ParserException Throws this exception if one of the arguments was not in the correct format.
+     */
     public AbstractPhoneCall parsePhoneCall(ArrayList<String> call) throws ParserException {
         String caller; //Holds the caller's phone number
         String callee; //Holds the callee's phone number
@@ -220,7 +250,6 @@ public class Project4 {
      *
      * @param comLineInput The command line arguments passed in by the main method
      * @param size         Holds the specific size the command line arguments should be.
-     * @throws ParserException Throws this exception with a message that says if it has too few or too many arguments.
      */
     public void parseCLSize(ArrayList<String> comLineInput, int size) {
         if (comLineInput.size() < size) {
@@ -238,6 +267,7 @@ public class Project4 {
      * will print an error message and exit the program.
      *
      * @param number The phone number from the command line that will be parsed by the method.
+     * @throws ParserException Throws this exception if the phone number is not in the correct format.
      */
     public void parseTelephone(String number) throws ParserException {
 
@@ -246,8 +276,6 @@ public class Project4 {
 
         if (!matcher.matches()) {
             throw new ParserException("Phone number must be in the format xxx-xxx-xxxx");
-            //System.err.println("Phone number must be in the format xxx-xxx-xxxx.");
-            //System.exit(1);
         }
     }
 
@@ -257,6 +285,8 @@ public class Project4 {
      * will throw a <code>ParseException</code>, give an error message, and exit the program.
      *
      * @param dateString The date and time string from the command line that will be parsed.
+     * @throws ParserException Throws this exception if the date is in the wrong format.
+     * @return Returns the new <code>Date</code> object that was parsed if it was in the correct format.
      */
     public Date parseDateAndTime(String dateString) throws ParserException {
         dateString = dateString.replace("pm", "PM").replace("am", "AM");

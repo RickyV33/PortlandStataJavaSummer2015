@@ -58,7 +58,7 @@ public class PhoneBill extends AbstractPhoneBill {
     }
 
     /**
-     * Overrides <code>AbstractPhoneBill</code>'s abstract method <code>getPhoneCalls</code> to return the list of
+     * Overrides <code>AbstractPhoneBill</code>'s abstract method <code>getPhoneCalls</code> to return the sorted list of
      * phone calls.
      *
      * @return The list of phone calls as a ArrayList.

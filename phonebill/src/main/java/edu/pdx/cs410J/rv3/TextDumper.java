@@ -18,6 +18,7 @@ public class TextDumper implements PhoneBillDumper {
     /**
      * Stores the name of the file that it writes to.
      */
+
     private String filename;
 
     /**
