@@ -1,6 +1,7 @@
 package edu.pdx.cs410J.rv3;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
+import edu.pdx.cs410J.AbstractPhoneCall;
 import edu.pdx.cs410J.PhoneBillDumper;
 
 import java.io.IOException;
@@ -107,5 +108,14 @@ public class PrettyPrinter implements PhoneBillDumper {
                     call.getCaller(), startDate, endDate, duration);
         }
         writer.close();
+    }
+
+    public String dumpWeb(AbstractPhoneCall call) throws IOException {
+        duration = call.getEndTime().getTime() - call.getStartTime().getTime();
+        duration = TimeUnit.MILLISECONDS.toMinutes(duration);
+        startDate = DateFormat.getDateInstance(DateFormat.LONG).format(call.getStartTime());
+        endDate = DateFormat.getDateInstance(DateFormat.LONG).format(call.getEndTime());
+        return String.format("You had a call from %s to your phone %s on %s to %s that lasted %s minutes.\n", call.getCallee(),
+                call.getCaller(), startDate, endDate, duration);
     }
 }

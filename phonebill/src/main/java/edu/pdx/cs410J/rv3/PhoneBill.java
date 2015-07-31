@@ -5,6 +5,7 @@ import edu.pdx.cs410J.AbstractPhoneCall;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * The <code>PhoneBill</code> class extends the <code>AbstractPhoneBill</code> class which creates
@@ -66,6 +67,18 @@ public class PhoneBill extends AbstractPhoneBill {
     public ArrayList<PhoneCall> getPhoneCalls() {
         Collections.sort(phoneCalls);
         return phoneCalls;
+    }
+
+    public ArrayList<PhoneCall> getPhoneCallsWithinRange(Date start, Date end) {
+        ArrayList<PhoneCall> rangeCalls = new ArrayList<>();
+
+        for (PhoneCall call: phoneCalls) {
+            Date callStart = call.getStartTime();
+            if (callStart.compareTo(start) >= 0 && callStart.compareTo(end) <= 0) {
+                rangeCalls.add(call);
+            }
+        }
+        return rangeCalls;
     }
 
     /**

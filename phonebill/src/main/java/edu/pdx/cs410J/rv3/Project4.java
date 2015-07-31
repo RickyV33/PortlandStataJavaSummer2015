@@ -11,6 +11,9 @@ import java.util.Collections;
 /**
  * The main class that parses the command line and communicates with the
  * Phone Bill server using REST.
+ *
+ * @author Ricky Valencia
+ * @version 1.0
  */
 public class Project4 {
 
@@ -22,10 +25,15 @@ public class Project4 {
         new Project4().run(argList);
     }
 
+    /**
+     * This is the main method that runs the program
+     *
+     * @param args an ArrayList of all the command line arguments
+     */
     private void run(ArrayList<String> args) {
 
-        StringBuilder hostName = null;
-        StringBuilder portString = null;
+        StringBuilder hostName = new StringBuilder();
+        StringBuilder portString = new StringBuilder();
         String customer = null;
         String caller = null;
         String callee = null;
@@ -35,53 +43,87 @@ public class Project4 {
         String endDate = null;
         String endTime = null;
         String endMeridian = null;
+        String start = null;
+        String end = null;
         boolean verbose = false;
         boolean search = false;
 
         if (args.size() == 0) {
             usage(MISSING_ARGS);
         }
+
+        //Parse all the options
         parseReadMe(args);
         verbose = parsePrint(args);
         search = parseSearch(args);
         parseHostAndPort(hostName, portString, args);
 
+        //Parses the port
         int port;
         try {
             port = Integer.parseInt(portString.toString());
-
         } catch (NumberFormatException ex) {
             usage("Port \"" + portString + "\" must be an integer");
             return;
         }
 
+        //Fill all the data variables
+        for (String arg : args) {
+            if (customer == null) {
+                customer = arg;
+            } else if (caller == null) {
+                caller = arg;
+            } else if (callee == null) {
+                callee = arg;
+            } else if (startDate == null) {
+                startDate = arg;
+            } else if (startTime == null) {
+                startTime = arg;
+            } else if (startMeridian == null) {
+                startMeridian = arg;
+            } else if (endDate == null) {
+                endDate = arg;
+            } else if (endTime == null) {
+                endTime = arg;
+            } else if (endMeridian == null) {
+                endMeridian = arg;
+            }
+        }
+
+        //Checks to make sure the right amount of arguments are there
+        if (search) {
+            //Shifting the data appropriately since the caller and callee are not present
+            start = caller + " " + callee + " " + startDate;
+            end = startTime + " " + startMeridian + " " + endDate;
+            parseCLSize(args, 7);
+
+        } else {
+            start = startDate + " " + startTime + " " + startMeridian;
+            end = endDate + " " + endTime + " " + endMeridian;
+            parseCLSize(args, 9);
+        }
+
+        //Uses the client to interact with the servlet
         PhoneBillRestClient client = new PhoneBillRestClient(hostName.toString(), port);
+        HttpRequestHelper.Response response = null;
 
-        HttpRequestHelper.Response response;
         try {
-            if (search) {
-
+            if (args.size() == 1) {
+                response = client.getAllPhoneCalls();
+            } else if (search) {
+                response = client.getRangePhoneCalls(customer, start, end);
             } else {
-               response = client.addCall(args);
+                response = client.addPhoneCall(customer, caller, callee, start, end);
             }
-            if (key == null) {
-                // Print all key/value pairs
-                response = client.getAllKeysAndValues();
-
-            } else if (value == null) {
-                // Print all values of key
-                response = client.getValues(key);
-
-            } else {
-                // Post the key/value pair
-                response = client.addKeyValuePair(key, value);
-            }
-
             checkResponseCode(HttpURLConnection.HTTP_OK, response);
 
         } catch (IOException ex) {
             error("While contacting server: " + ex);
             return;
+        }
+
+        if (verbose && !search) {
+            System.out.println(String.format("Phone call from %s to %s from %s to %s.)", caller, callee, start, end));
         }
 
         System.out.println(response.getContent());
@@ -106,15 +148,10 @@ public class Project4 {
      * Prints a description of the project by explaining how to use it, what it is, and any new features.
      */
     private void printDescription() {
-        System.out.println("Author: Ricky Valencia\n Assignment: Project 1\n" +
-                "This program takes in command line arguments which include customer's name, caller phone number, callee\n" +
-                "phone number, the start date and time of the call, and when the call ended. The Order of the arguments is\n" +
-                "important and they can be followed by the optional tags -print and -README, which can be in any order. This\n" +
-                "program will parse the CL arguments and check to make sure they are in the correct format. If the user \n" +
-                "inputs the -print tag then it will print a description of the call. If the user adds the -README tag, then\n" +
-                "it will print a description of the program without executing the rest of the program. It can read and write\n " +
-                "the phone call to the file if the -textFile tag exists with a filename. Now, it can use a -pretty tag that" +
-                "will display the contents of the phone bill in a text file or the output stream in a neat, pretty format.");
+        System.out.println("Author: Ricky Valencia\n Assignment: Project 4\n" +
+                "This project is an extension of the phone bill application to support a phone bill server\n" +
+                "that provides REST-ful web services to a phone bill client.\n");
+        usage("This is how to use the program:");
     }
 
     /**
@@ -133,6 +170,13 @@ public class Project4 {
         return false;
     }
 
+    /**
+     * Parses the command line for the '-search' tag. If it has it, then it returns true and removes it fro m the list,
+     * otherwise it returns false
+     *
+     * @param list is the command line argumetn
+     * @return true if the command line arguments contain '-search' otherwise false
+     */
     private boolean parseSearch(ArrayList<String> list) {
         if (list.contains("-search")) {
             list.remove("-search");
@@ -141,20 +185,45 @@ public class Project4 {
         return false;
     }
 
+    /**
+     * Parses the command line argumetns for the '-port' and '-host' tags. If they are included, then it removes them from
+     * the list after adding them to the host and port arguments.
+     *
+     * @param host Where the host will be written to if it is included
+     * @param port Where the port will be written to if it is included
+     * @param list The list of command line arguments
+     */
     private void parseHostAndPort(StringBuilder host, StringBuilder port, ArrayList<String> list) {
         if (list.contains("-host") && list.contains("-port")) {
             int hostIndex = list.indexOf("-host") + 1;
             int portIndex = list.indexOf("-port") + 1;
             host.append(list.get(hostIndex));
             port.append(list.get(portIndex));
-            list.remove(hostIndex-1);
             list.remove(hostIndex);
-            list.remove(portIndex-1);
+            list.remove(hostIndex - 1);
+            portIndex = list.indexOf("-port") + 1;
             list.remove(portIndex);
-        } else if(list.contains("-host")) {
+            list.remove(portIndex - 1);
+        } else if (list.contains("-host")) {
             usage("Missing port!");
-        } else if(list.contains("-port")) {
+        } else if (list.contains("-port")) {
             usage("Missing the hostname!");
+        }
+    }
+
+    /**
+     * This method parses the command line arguments and checks to see if it has the correct number of arguments for a
+     * phone call. It must have 7 arguments in total and it will exit with an error message if it is under or over the
+     * size of the argument passed in.
+     *
+     * @param comLineInput The command line arguments passed in by the main method
+     * @param size         Holds the specific size the command line arguments should be.
+     */
+    private void parseCLSize(ArrayList<String> comLineInput, int size) {
+        if (comLineInput.size() < size) {
+            usage("Missing command line arguments.");
+        } else if (comLineInput.size() > size) {
+            usage("Too many command line arguments.");
         }
     }
 
@@ -187,15 +256,20 @@ public class Project4 {
         PrintStream err = System.err;
         err.println("** " + message);
         err.println();
-        err.println("usage: java Project4 host port [key] [value]");
-        err.println("  host    Host of web server");
-        err.println("  port    Port of web server");
-        err.println("  key     Key to query");
-        err.println("  value   Value to add to server");
+        err.println("usage: java edu.pdx.cs410J.<login-id>.Project4 [options] <args>");
+        err.println("args are (in this order)");
+        err.println("  customer   Person whose phone bill we're modeling");
+        err.println("  callerNumber   Phone number of caller");
+        err.println("  calleeNumber     Phone number of person who was called");
+        err.println("  startTime   Date and time call began");
+        err.println("  endTime   Date and time call began");
         err.println();
-        err.println("This simple program posts key/value pairs to the server");
-        err.println("If no value is specified, then all values are printed");
-        err.println("If no key is specified, all key/value pairs are printed");
+        err.println("options are (options may appear in any order)");
+        err.println("-host hostname   Host computer on which the server runs");
+        err.println("-port port   Port on which the server is listening");
+        err.println("-search   Phone calls should be searched for");
+        err.println("-print Prints a description of the new phone call");
+        err.println("-README prints a README for this project and exits");
         err.println();
 
         System.exit(1);
