@@ -5,7 +5,6 @@ import edu.pdx.cs410J.AbstractPhoneCall;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * The <code>PhoneBill</code> class extends the <code>AbstractPhoneBill</code> class which creates
