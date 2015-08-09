@@ -7,6 +7,7 @@ import edu.pdx.cs410J.rv3.client.PhoneCall;
 import edu.pdx.cs410J.rv3.client.PingService;
 
 import java.lang.Override;
+import java.util.Date;
 
 /**
  * The server-side implementation of the Phone Bill service
@@ -15,8 +16,8 @@ public class PingServiceImpl extends RemoteServiceServlet implements PingService
 {
   @Override
   public AbstractPhoneBill ping() {
-    PhoneBill phonebill = new PhoneBill();
-    phonebill.addPhoneCall(new PhoneCall());
+    PhoneBill phonebill = new PhoneBill("Test");
+    phonebill.addPhoneCall(new PhoneCall("1", "2", new Date(), new Date()));
     return phonebill;
   }
 

@@ -1,9 +1,13 @@
-package edu.pdx.cs410J.rv3;
+package edu.pdx.cs410J.rv3.client;
 
+import com.google.gwt.i18n.shared.DateTimeFormat;
 import edu.pdx.cs410J.AbstractPhoneCall;
 
-import java.text.DateFormat;
+import java.lang.Override;
 import java.util.Date;
+
+
+
 
 /**
  * The <code>PhoneCall</code> class extends the <code>AbstractPhoneCall</code> class which
@@ -14,7 +18,7 @@ import java.util.Date;
  * @author Ricky Valencia
  * @version 1.0
  */
-public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall> {
+public class PhoneCall extends AbstractPhoneCall implements Comparable<AbstractPhoneCall> {
     /**
      * Stores the caller's phone number in the format xxx-xxx-xxxx.
      */
@@ -48,6 +52,7 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
         this.endTime = endTime;
     }
 
+    public PhoneCall() {}
     /**
      * Overrides <code>AbstractPhoneCall</code>'s abstract method <code>getCaller</code> to get the caller's phone number.
      *
@@ -76,7 +81,9 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
      */
     @Override
     public String getStartTimeString() {
-        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(startTime);
+        //return DateTimeFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(startTime);
+        DateTimeFormat format = DateTimeFormat.getFormat("MM/dd/yyyy HH:mm:ss a");
+        return format.format(startTime);
     }
 
     /**
@@ -87,7 +94,9 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
      */
     @Override
     public String getEndTimeString() {
-        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(endTime);
+        //return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(endTime);
+        DateTimeFormat format = DateTimeFormat.getFormat("MM/dd/yyyy HH:mm:ss a");
+        return format.format(endTime);
     }
 
     /**
@@ -131,7 +140,7 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
      * @return Returns -1 if <code>this</code> comes before <code>call</code>, 1 if it comes after, or 0 if they are equal.
      */
     @Override
-    public int compareTo(PhoneCall call) {
+    public int compareTo(AbstractPhoneCall call) {
         Date startTime = call.getStartTime();
         String caller = call.getCaller();
 

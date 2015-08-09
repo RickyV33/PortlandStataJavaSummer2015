@@ -1,11 +1,14 @@
-package edu.pdx.cs410J.rv3;
+package edu.pdx.cs410J.rv3.client;
 
-import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.AbstractPhoneCall;
+import edu.pdx.cs410J.AbstractPhoneBill;
 
+import java.lang.Override;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+
 
 /**
  * The <code>PhoneBill</code> class extends the <code>AbstractPhoneBill</code> class which creates
@@ -22,7 +25,7 @@ public class PhoneBill extends AbstractPhoneBill {
     /**
      * Stores the list of all the phone calls made by the customer.
      */
-    public ArrayList<PhoneCall> phoneCalls;
+    public Collection<AbstractPhoneCall> phoneCalls;
 
     /**
      * Creates a new <code>PhoneBill</code> object using only the customers name.
@@ -32,6 +35,9 @@ public class PhoneBill extends AbstractPhoneBill {
     public PhoneBill(String customer) {
         this.customer = customer;
     }
+
+
+    public PhoneBill() {}
 
     /**
      * Overrides <code>AbstractPhoneBill</code>'s abstract method <code>getCustomer</code> to return the customer's name.
@@ -64,15 +70,15 @@ public class PhoneBill extends AbstractPhoneBill {
      * @return The list of phone calls as a ArrayList.
      */
     @Override
-    public ArrayList<PhoneCall> getPhoneCalls() {
-        Collections.sort(phoneCalls);
+    public Collection<AbstractPhoneCall> getPhoneCalls() {
+        Collections.sort((ArrayList) phoneCalls);
         return phoneCalls;
     }
 
-    public ArrayList<PhoneCall> getPhoneCallsWithinRange(Date start, Date end) {
-        ArrayList<PhoneCall> rangeCalls = new ArrayList<>();
+    public Collection<AbstractPhoneCall> getPhoneCallsWithinRange(Date start, Date end) {
+        Collection<AbstractPhoneCall> rangeCalls = new ArrayList<>();
 
-        for (PhoneCall call : phoneCalls) {
+        for (AbstractPhoneCall call: phoneCalls) {
             Date callStart = call.getStartTime();
             if (callStart.compareTo(start) >= 0 && callStart.compareTo(end) <= 0) {
                 rangeCalls.add(call);

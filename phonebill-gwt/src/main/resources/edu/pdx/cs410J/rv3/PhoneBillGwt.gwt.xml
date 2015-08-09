@@ -1,13 +1,8 @@
 <module rename-to="phonebill">
-  <!-- Inherit the core Web Toolkit stuff.-->
   <inherits name="com.google.gwt.user.User"/>
-  <!-- Inherit the default GWT style sheet.-->
   <inherits name='com.google.gwt.user.theme.standard.Standard'/>
-  <!--Inherit hte module edi...Projects -->
   <inherits name='edu.pdx.cs410J.Projects'/>
-  <!-- Set the entry point class -->
   <entry-point class="edu.pdx.cs410J.rv3.client.PhoneBillGwt"/>
 
-  <!-- specify where the servlet is -->
   <servlet path="/ping" class="edu.pdx.cs410J.rv3.server.PingServiceImpl"/>
 </module>
