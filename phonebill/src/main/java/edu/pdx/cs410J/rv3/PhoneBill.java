@@ -72,7 +72,7 @@ public class PhoneBill extends AbstractPhoneBill {
     public ArrayList<PhoneCall> getPhoneCallsWithinRange(Date start, Date end) {
         ArrayList<PhoneCall> rangeCalls = new ArrayList<>();
 
-        for (PhoneCall call: phoneCalls) {
+        for (PhoneCall call : phoneCalls) {
             Date callStart = call.getStartTime();
             if (callStart.compareTo(start) >= 0 && callStart.compareTo(end) <= 0) {
                 rangeCalls.add(call);
