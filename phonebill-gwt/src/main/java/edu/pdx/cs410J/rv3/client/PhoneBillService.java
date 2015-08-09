@@ -7,8 +7,8 @@ import edu.pdx.cs410J.AbstractPhoneBill;
 /**
  * A GWT remote service that returns a dummy Phone Bill
  */
-@RemoteServiceRelativePath("ping")
-public interface PingService extends RemoteService {
+@RemoteServiceRelativePath("phoneBill")
+public interface PhoneBillService extends RemoteService {
 
   /**
    * Returns the a dummy Phone Bill

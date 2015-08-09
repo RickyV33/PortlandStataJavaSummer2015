@@ -4,7 +4,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.rv3.client.PhoneBill;
 import edu.pdx.cs410J.rv3.client.PhoneCall;
-import edu.pdx.cs410J.rv3.client.PingService;
+import edu.pdx.cs410J.rv3.client.PhoneBillService;
 
 import java.lang.Override;
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * The server-side implementation of the Phone Bill service
  */
-public class PingServiceImpl extends RemoteServiceServlet implements PingService
+public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneBillService
 {
   @Override
   public AbstractPhoneBill ping() {
