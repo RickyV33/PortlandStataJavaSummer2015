@@ -1,0 +1,104 @@
+h1 {
+    font-family: 'Righteous', Georgia;
+    color: #6D635D;;
+    font-size: 65px;
+    font-weight: normal;
+    line-height: 60px;
+    margin: 10px 0 20px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0 #000, margin: 10px 0 24px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 30px;
+    letter-spacing: 1px;
+    color: #6D635D;;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 0 #000, margin: 10px 0 24 px;
+    text-align: center;
+    line-height: 50px;
+}
+
+body {
+    background-color: #EBE3E0;
+}
+
+.display {
+    align: center;
+    background-color:#DDE0CD
+}
+
+.normal-button{
+  white-space:nowrap;
+  top:0px;
+  border-radius:4px;
+  position:relative;
+  border:none;
+  background:none;
+  font-family: 'Roboto', sans-serif;
+  width: 200px;
+  height: 50px;
+  cursor:pointer;
+  transition:0.1s all ease;
+  font-size : 16px;
+  font-weight: 300;
+  color:#777;
+  border-bottom: 1px solid #ccc;
+  box-shadow:0px 0px 0px 0px #B8B8B8;
+
+  background-color:#F9A646;
+  color:#7b5348;
+  border-bottom: 1px solid #7b5348;
+}
+
+.normal-button:hover {
+      background-color:#FAC07D;
+      top:-2px;
+      border-bottom: 4px solid #7b5348;
+      box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.25);
+}
+
+.normal-button:active {
+      top:0px;
+      border: 1px solid #7b5348;
+      background-color:#C78438;
+      box-shadow: inset 0px 0px 4px rgba(0,0,0,0.25);
+}
+
+.small-button{
+  white-space:nowrap;
+  top:0px;
+  border-radius:4px;
+  position:relative;
+  border:none;
+  background:none;
+  font-family: 'Roboto', sans-serif;
+  width: 100px;
+  height: 25px;
+  cursor:pointer;
+  transition:0.1s all ease;
+  font-size : 10px;
+  font-weight: 300;
+  color:#777;
+  border-bottom: 1px solid #ccc;
+  box-shadow:0px 0px 0px 0px #B8B8B8;
+
+  background-color:#F9A646;
+  color:#7b5348;
+  border-bottom: 1px solid #7b5348;
+}
+
+.small-button:hover {
+      background-color:#FAC07D;
+      top:-2px;
+      border-bottom: 4px solid #7b5348;
+      box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.25);
+}
+
+.small-button:active {
+      top:0px;
+      border: 1px solid #7b5348;
+      background-color:#C78438;
+      box-shadow: inset 0px 0px 4px rgba(0,0,0,0.25);
+}
