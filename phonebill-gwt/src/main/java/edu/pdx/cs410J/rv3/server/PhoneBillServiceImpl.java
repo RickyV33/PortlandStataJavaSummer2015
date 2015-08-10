@@ -16,7 +16,7 @@ import java.util.Date;
 public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneBillService
 {
   @Override
-  public AbstractPhoneBill addPhoneCall(Collection<String> args) {
+  public AbstractPhoneBill addPhoneCall(Collection<String> args) throws RuntimeException{
     String name = null;
     for (String arg: args) {
       name = arg;

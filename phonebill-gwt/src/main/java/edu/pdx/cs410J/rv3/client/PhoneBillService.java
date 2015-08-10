@@ -15,6 +15,6 @@ public interface PhoneBillService extends RemoteService {
   /**
    * Returns the a dummy Phone Bill
    */
-  public AbstractPhoneBill addPhoneCall(Collection<String> args);
+  public AbstractPhoneBill addPhoneCall(Collection<String> args) throws RuntimeException;
 
 }
