@@ -3,6 +3,8 @@ package edu.pdx.cs410J.rv3.client;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import edu.pdx.cs410J.AbstractPhoneBill;
+import edu.pdx.cs410J.AbstractPhoneCall;
+import edu.pdx.cs410J.ParserException;
 
 import java.util.Collection;
 
@@ -15,6 +17,6 @@ public interface PhoneBillService extends RemoteService {
   /**
    * Returns the a dummy Phone Bill
    */
-  public AbstractPhoneBill addPhoneCall(Collection<String> args) throws RuntimeException;
+  public AbstractPhoneCall addPhoneCall(Collection<String> args) throws RuntimeException;
 
 }

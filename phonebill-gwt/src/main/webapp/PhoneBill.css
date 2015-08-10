@@ -108,6 +108,6 @@ body {
 .small-button:active {
     top:0px;
     border: 1px solid #d69280;
-    background-color:#C78438;
+    background-color:#B88578;
     box-shadow: inset 0px 0px 4px rgba(0,0,0,0.25);
 }

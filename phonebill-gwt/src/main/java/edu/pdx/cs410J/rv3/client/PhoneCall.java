@@ -82,7 +82,7 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<AbstractP
     @Override
     public String getStartTimeString() {
         //return DateTimeFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(startTime);
-        DateTimeFormat format = DateTimeFormat.getFormat("MM/dd/yyyy HH:mm:ss a");
+        DateTimeFormat format = DateTimeFormat.getFormat("MM/dd/yyyy hh:mm a");
         return format.format(startTime);
     }
 
@@ -95,7 +95,7 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<AbstractP
     @Override
     public String getEndTimeString() {
         //return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(endTime);
-        DateTimeFormat format = DateTimeFormat.getFormat("MM/dd/yyyy HH:mm:ss a");
+        DateTimeFormat format = DateTimeFormat.getFormat("MM/dd/yyyy hh:mm a");
         return format.format(endTime);
     }
 

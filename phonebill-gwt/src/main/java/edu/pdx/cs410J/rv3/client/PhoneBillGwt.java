@@ -8,7 +8,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import edu.pdx.cs410J.AbstractPhoneCall;
-import edu.pdx.cs410J.AbstractPhoneBill;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +33,7 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
 
     public void onModuleLoad() {
         viewPanel.add(buildInputScreenView());
-        viewPanel.add(buildPrintedCallsView());
+        viewPanel.add(buildPhoneBillView());
         viewPanel.add(buildSearchCallsView());
 
         addPhoneCallViewButton.addClickHandler(this);
@@ -46,35 +45,14 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
         rootPanel.setStyleName("display");
         RootPanel.get("view-buttons").add(buildButtons());
         viewPanel.showWidget(0);
+        nameTextBox.setFocus(true);
     }
 
     public void onClick(ClickEvent event) {
         Widget sender = (Widget) event.getSource();
 
         if (sender == addPhoneCallButton) {
-            if (checkInputTextBoxes()) {
-                Window.alert("Please fill in all the required fields.");
-                return;
-            }
-            PhoneBillServiceAsync async = GWT.create(PhoneBillService.class);
-            Collection<String> test = new ArrayList<>();
-            test.add("RICKY");
-            async.addPhoneCall(test, new AsyncCallback<AbstractPhoneBill>() {
-
-                public void onFailure(Throwable ex) {
-                    Window.alert(ex.toString());
-                }
-
-                public void onSuccess(AbstractPhoneBill phonebill) {
-                    StringBuilder sb = new StringBuilder(phonebill.toString());
-                    Collection<AbstractPhoneCall> calls = phonebill.getPhoneCalls();
-                    for (AbstractPhoneCall call : calls) {
-                        sb.append(call);
-                        sb.append("\n");
-                    }
-                    Window.alert(sb.toString());
-                }
-            });
+            addPhoneCall();
         } else if (sender == searchCallsButton) {
             if (checkSearchTextBoxes()) {
                 Window.alert("Please fill in all the required fields.");
@@ -83,11 +61,58 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
             PhoneBillServiceAsync async = GWT.create(PhoneBillService.class);
         } else if (sender == addPhoneCallViewButton) {
             viewPanel.showWidget(0);
+            nameTextBox.setFocus(true);
         } else if (sender == phoneBillViewButton) {
             viewPanel.showWidget(1);
         } else if (sender == searchPhoneCallViewButton) {
             viewPanel.showWidget(2);
+            startSearchTextBox.setFocus(true);
         }
+    }
+
+    private void addPhoneCall() {
+        if (checkInputTextBoxes()) {
+            Window.alert("Please fill in all the required fields.");
+            return;
+        }
+        PhoneBillServiceAsync async = GWT.create(PhoneBillService.class);
+        Collection<String> phoneCall = getPhoneCall();
+        async.addPhoneCall(phoneCall, addPhoneCallCallback());
+    }
+
+    private Collection<String> getPhoneCall() {
+        Collection<String> phoneCall = new ArrayList<>();
+        phoneCall.add(nameTextBox.getText());
+        phoneCall.add(callerTextBox.getText());
+        phoneCall.add(calleeTextBox.getText());
+        phoneCall.add(startTextBox.getText());
+        phoneCall.add(endTextBox.getText());
+        return phoneCall;
+    }
+
+    private AsyncCallback<AbstractPhoneCall> addPhoneCallCallback() {
+        return new AsyncCallback<AbstractPhoneCall>() {
+            @Override
+            public void onFailure(Throwable ex) {
+                if (ex instanceof RuntimeException) {
+                    Window.alert(ex.toString());
+                }
+            }
+            @Override
+            public void onSuccess(AbstractPhoneCall phoneCall) {
+                Window.alert("Added " + phoneCall.toString().toLowerCase());
+                clearInputTextBoxes();
+            }
+        };
+    }
+
+    private void clearInputTextBoxes() {
+        nameTextBox.setText("");
+        callerTextBox.setText("");
+        calleeTextBox.setText("");
+        startTextBox.setText("");
+        endTextBox.setText("");
+        nameTextBox.setFocus(true);
     }
 
     private VerticalPanel buildInputScreenView() {
@@ -138,9 +163,10 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
         return panel;
     }
 
-    private VerticalPanel buildPrintedCallsView() {
+    private VerticalPanel buildPhoneBillView() {
         VerticalPanel panel = new VerticalPanel();
         panel.add(new HTML("<h2>View the Phone Bill</h2>"));
+        panel.add(table);
         return panel;
     }
 
@@ -193,7 +219,6 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
         panel.add(searchPhoneCallViewButton);
         return panel;
     }
-
 
     private boolean checkInputTextBoxes() {
         return (textBoxNotEmpty(nameTextBox) || textBoxNotEmpty(callerTextBox) || textBoxNotEmpty(calleeTextBox) ||
