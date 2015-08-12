@@ -47,11 +47,13 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
 
         if (sender == addPhoneCallViewButton) {
             viewPanel.showWidget(0);
+            addPhoneCallView.setFocus();
         } else if (sender == phoneBillViewButton) {
             viewPanel.showWidget(1);
             phoneBillView.displayPhoneCalls();
         } else if (sender == searchPhoneCallViewButton) {
             viewPanel.showWidget(2);
+            searchCallsView.setFocus();
         }
     }
 

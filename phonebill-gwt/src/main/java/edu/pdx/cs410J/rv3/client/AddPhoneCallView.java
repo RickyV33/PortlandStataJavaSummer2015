@@ -36,46 +36,13 @@ public class AddPhoneCallView extends Composite implements ClickHandler{
         addPhoneCallButton.addClickHandler(this);
         initWidget(panel);
     }
+
     public void onClick(ClickEvent event) {
         Widget sender = (Widget) event.getSource();
 
         if (sender == addPhoneCallButton) {
             addPhoneCall();
         }
-    }
-
-    private VerticalPanel buildInputLabels() {
-        VerticalPanel panel = new VerticalPanel();
-        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        panel.setSpacing(16);
-        Label name = new Label("Name:");
-        Label caller = new Label("Caller:");
-        Label callee = new Label("Callee:");
-        Label start = new Label("Start Date:");
-        Label end = new Label("End Date:");
-        name.setStyleName("label");
-        caller.setStyleName("label");
-        callee.setStyleName("label");
-        start.setStyleName("label");
-        end.setStyleName("label");
-        panel.add(name);
-        panel.add(caller);
-        panel.add(callee);
-        panel.add(start);
-        panel.add(end);
-        return panel;
-    }
-
-    private VerticalPanel buildInputTextBoxes() {
-        VerticalPanel panel = new VerticalPanel();
-        panel.setSpacing(8);
-        nameTextBox.setFocus(true);
-        panel.add(nameTextBox);
-        panel.add(callerTextBox);
-        panel.add(calleeTextBox);
-        panel.add(startTextBox);
-        panel.add(endTextBox);
-        return panel;
     }
 
     private void addPhoneCall() {
@@ -122,7 +89,41 @@ public class AddPhoneCallView extends Composite implements ClickHandler{
         calleeTextBox.setText("");
         startTextBox.setText("");
         endTextBox.setText("");
-        nameTextBox.setFocus(true);
+        setFocus();
+    }
+
+    private VerticalPanel buildInputLabels() {
+        VerticalPanel panel = new VerticalPanel();
+        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        panel.setSpacing(16);
+        Label name = new Label("Name:");
+        Label caller = new Label("Caller:");
+        Label callee = new Label("Callee:");
+        Label start = new Label("Start Date:");
+        Label end = new Label("End Date:");
+        name.setStyleName("label");
+        caller.setStyleName("label");
+        callee.setStyleName("label");
+        start.setStyleName("label");
+        end.setStyleName("label");
+        panel.add(name);
+        panel.add(caller);
+        panel.add(callee);
+        panel.add(start);
+        panel.add(end);
+        return panel;
+    }
+
+    private VerticalPanel buildInputTextBoxes() {
+        VerticalPanel panel = new VerticalPanel();
+        panel.setSpacing(8);
+        panel.add(nameTextBox);
+        panel.add(callerTextBox);
+        panel.add(calleeTextBox);
+        panel.add(startTextBox);
+        panel.add(endTextBox);
+        setFocus();
+        return panel;
     }
 
     private boolean checkInputTextBoxes() {
@@ -132,5 +133,9 @@ public class AddPhoneCallView extends Composite implements ClickHandler{
 
     private boolean textBoxNotEmpty(TextBox textBox) {
         return (textBox.getText() == null || textBox.getText().equals(""));
+    }
+
+    public void setFocus() {
+        nameTextBox.setFocus(true);
     }
 }

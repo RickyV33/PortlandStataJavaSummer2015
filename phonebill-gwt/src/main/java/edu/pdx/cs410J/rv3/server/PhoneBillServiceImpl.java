@@ -69,8 +69,31 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
         return call;
     }
 
-    public Collection<AbstractPhoneCall> getPhoneCalls() {
-        return phonebill.getPhoneCalls();
+    @Override
+    public AbstractPhoneBill getPhoneBill() throws RuntimeException{
+        if (phonebill == null) {
+            throw new RuntimeException("There are no phone calls in the bill yet!");
+        }
+        return phonebill;
+    }
+
+    @Override
+    public Collection<AbstractPhoneCall> getPhoneCallsWithinRange(String start, String end) throws RuntimeException {
+        PhoneCallParser parser = new PhoneCallParser();
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = parser.parseDate(start);
+            endDate = parser.parseDate(end);
+        } catch (ParserException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+
+        if (phonebill == null) {
+            return new ArrayList<AbstractPhoneCall>();
+        }
+        return phonebill.getPhoneCallsWithinRange(startDate, endDate);
+
     }
     /**
      * Log unhandled exceptions to standard error

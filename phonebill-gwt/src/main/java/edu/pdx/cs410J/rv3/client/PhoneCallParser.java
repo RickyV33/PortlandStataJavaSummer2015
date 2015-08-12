@@ -17,11 +17,11 @@ public class PhoneCallParser {
     /**
      * Parses the dateString string against two different string formats, MM/dd/yyyy HH:mm and "M/dd/yyyy HH:mm, to make
      * sure that they were entered in under the correct format. If it's not in the proper format, <code>ParseDateAndTime</code>
-     * will throw a <code>ParseException</code>, give an error message.
+     * will throw a <code>ParserException</code>, give an error message.
      *
      * @param date The date and time string from the command line that will be parsed.
      * @return Returns the new <code>Date</code> object that was parsed if it was in the correct format.
-     * @throws ParseException Throws this exception if the date is in the wrong format.
+     * @throws ParserException Throws this exception if the date is in the wrong format.
      */
     public Date parseDate(String date) throws ParserException {
         date = date.replace("pm", "PM").replace("am", "AM");
