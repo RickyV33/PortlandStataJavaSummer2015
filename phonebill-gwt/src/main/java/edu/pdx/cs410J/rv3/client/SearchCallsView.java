@@ -19,32 +19,43 @@ import java.util.Date;
  */
 public class SearchCallsView extends Composite implements ClickHandler {
     private Button searchCallsButton = new Button("Search");
+    private Button clearButton = new Button("Clear");
     private TextBox startSearchTextBox = new TextBox();
     private TextBox endSearchTextBox = new TextBox();
     private FlexTable table = new FlexTable();
 
-    public SearchCallsView () {
+    public SearchCallsView() {
         VerticalPanel panel = new VerticalPanel();
         HorizontalPanel input = new HorizontalPanel();
+        HorizontalPanel buttons = new HorizontalPanel();
+
+        buttons.setSpacing(5);
         input.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         input.add(buildSearchLabels());
         input.add(buildSearchTextBoxes());
-
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         panel.add(new HTML("<h2>Search the Phone Calls</h2>"));
         panel.add(input);
         searchCallsButton.setStyleName("small-button");
-        panel.add(searchCallsButton);
+        clearButton.setStyleName("small-button");
+        buttons.add(clearButton);
+        buttons.add(searchCallsButton);
+        panel.add(buttons);
         panel.add(table);
         searchCallsButton.addClickHandler(this);
+        clearButton.addClickHandler(this);
         initWidget(panel);
     }
 
     public void onClick(ClickEvent event) {
         Widget sender = (Widget) event.getSource();
 
-        if (sender == searchCallsButton){
+        if (sender == searchCallsButton) {
             searchPhoneCalls();
+        } else if (sender == clearButton) {
+            startSearchTextBox.setText("");
+            endSearchTextBox.setText("");
+            setFocus();
         }
     }
 
@@ -59,6 +70,7 @@ public class SearchCallsView extends Composite implements ClickHandler {
         async.getPhoneCallsWithinRange(start, end, getPhoneCallsWithinRangeCallback());
 
     }
+
     private AsyncCallback<Collection<AbstractPhoneCall>> getPhoneCallsWithinRangeCallback() {
         return new AsyncCallback<Collection<AbstractPhoneCall>>() {
             @Override

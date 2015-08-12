@@ -16,6 +16,7 @@ import java.util.Collection;
  */
 public class AddPhoneCallView extends Composite implements ClickHandler{
     private Button addPhoneCallButton = new Button("Add");
+    private Button clearButton = new Button("Clear");
     private TextBox nameTextBox = new TextBox();
     private TextBox callerTextBox = new TextBox();
     private TextBox calleeTextBox = new TextBox();
@@ -25,6 +26,9 @@ public class AddPhoneCallView extends Composite implements ClickHandler{
     public AddPhoneCallView() {
         VerticalPanel panel = new VerticalPanel();
         HorizontalPanel input = new HorizontalPanel();
+        HorizontalPanel buttons = new HorizontalPanel();
+
+        buttons.setSpacing(5);
         input.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         input.add(buildInputLabels());
         input.add(buildInputTextBoxes());
@@ -32,8 +36,12 @@ public class AddPhoneCallView extends Composite implements ClickHandler{
         panel.add(new HTML("<h2>Add a Phone Call</h2>"));
         panel.add(input);
         addPhoneCallButton.setStyleName("small-button");
-        panel.add(addPhoneCallButton);
+        clearButton.setStyleName("small-button");
+        buttons.add(addPhoneCallButton);
+        buttons.add(clearButton);
+        panel.add(buttons);
         addPhoneCallButton.addClickHandler(this);
+        clearButton.addClickHandler(this);
         initWidget(panel);
     }
 
@@ -42,6 +50,8 @@ public class AddPhoneCallView extends Composite implements ClickHandler{
 
         if (sender == addPhoneCallButton) {
             addPhoneCall();
+        } else if (sender == clearButton) {
+            clearInputTextBoxes();
         }
     }
 
@@ -78,7 +88,6 @@ public class AddPhoneCallView extends Composite implements ClickHandler{
             @Override
             public void onSuccess(AbstractPhoneCall phoneCall) {
                 Window.alert("Added " + phoneCall.toString().toLowerCase() + " to " + cust + "'s phone bill.");
-                clearInputTextBoxes();
             }
         };
     }

@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
@@ -20,6 +21,7 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
     private Button addPhoneCallViewButton = new Button("Add Phone Call");
     private Button phoneBillViewButton = new Button("View Phone Bill");
     private Button searchPhoneCallViewButton = new Button("Search Phone Calls");
+    private Button readMeButton = new Button("Read me");
     private AddPhoneCallView addPhoneCallView = new AddPhoneCallView();
     private PhoneBillView phoneBillView = new PhoneBillView();
     private SearchCallsView searchCallsView = new SearchCallsView();
@@ -34,12 +36,26 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
         addPhoneCallViewButton.addClickHandler(this);
         phoneBillViewButton.addClickHandler(this);
         searchPhoneCallViewButton.addClickHandler(this);
+        MenuBar readMeMenu = new MenuBar(true);
+        readMeMenu.addItem("Read me", displayReadMe());
+        MenuBar help = new MenuBar();
+        help.addItem("Help", readMeMenu);
+
 
         RootPanel rootPanel = RootPanel.get("view-display");
+        RootPanel.get("help-display").add(help);
         rootPanel.add(viewPanel);
         rootPanel.setStyleName("display");
         RootPanel.get("view-buttons").add(buildButtons());
         viewPanel.showWidget(0);
+    }
+
+    private Command displayReadMe() {
+        return new Command() {
+            public void execute() {
+                Window.alert("THIS IS THE README");
+            }
+        };
     }
 
     public void onClick(ClickEvent event) {
