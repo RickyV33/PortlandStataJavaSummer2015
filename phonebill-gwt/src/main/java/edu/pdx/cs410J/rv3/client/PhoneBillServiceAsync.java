@@ -16,4 +16,5 @@ public interface PhoneBillServiceAsync {
    * Return the current date/time on the server
    */
   void addPhoneCall(Collection<String> args, AsyncCallback<AbstractPhoneCall> async) throws RuntimeException;
+  void getPhoneCalls(AsyncCallback<Collection<AbstractPhoneCall>> async);
 }

@@ -10,6 +10,7 @@ import edu.pdx.cs410J.rv3.client.PhoneBillService;
 import edu.pdx.cs410J.rv3.client.PhoneCallParser;
 
 import java.lang.Override;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -27,8 +28,8 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
         String start = null;
         String end = null;
         PhoneCallParser parser = new PhoneCallParser();
-        Date startDate ;
-        Date endDate ;
+        Date startDate;
+        Date endDate;
 
         for (String arg : args) {
             if (customer == null) {
@@ -60,13 +61,17 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
         if (phonebill == null) {
             phonebill = new PhoneBill(customer);
         } else if (!phonebill.getCustomer().equals(customer)) {
-            throw new RuntimeException("The customer does not match the current customer!");
+            throw new RuntimeException("The customer '" + customer + "' does not match the current customer '" +
+                    phonebill.getCustomer() + "'!");
         }
         PhoneCall call = new PhoneCall(caller, callee, startDate, endDate);
         phonebill.addPhoneCall(call);
         return call;
     }
 
+    public Collection<AbstractPhoneCall> getPhoneCalls() {
+        return phonebill.getPhoneCalls();
+    }
     /**
      * Log unhandled exceptions to standard error
      *
