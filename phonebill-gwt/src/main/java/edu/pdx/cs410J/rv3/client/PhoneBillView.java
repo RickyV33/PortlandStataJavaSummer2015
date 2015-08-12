@@ -11,11 +11,15 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- * Created by Slick on 8/11/15.
+ * This phone bill manages the display of all the phone calls within the phone bill on the server side.
+ *
+ * @author Ricky Valencia
  */
-public class PhoneBillView extends Composite{
+public class PhoneBillView extends Composite {
+    /** Holds a list of phone calls that are printed pretty */
     FlexTable table = new FlexTable();
 
+    /** Constructor that builds the view that holds a title and all the phone calls if they exist. */
     public PhoneBillView() {
         VerticalPanel panel = new VerticalPanel();
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -24,12 +28,17 @@ public class PhoneBillView extends Composite{
         initWidget(panel);
     }
 
-
+    /** Displays all the phone calls using an asynchronous call */
     public void displayPhoneCalls() {
         PhoneBillServiceAsync async = GWT.create(PhoneBillService.class);
         async.getPhoneBill(getPhoneBillCallback());
     }
 
+    /** The async callback object that retrieves the phone calls from the server and displays it if there are any
+     * phone calls in it.
+     *
+     * @return the async callback used by the async object.
+     */
     private AsyncCallback<AbstractPhoneBill> getPhoneBillCallback() {
         return new AsyncCallback<AbstractPhoneBill>() {
             @Override

@@ -20,6 +20,13 @@ import java.util.Date;
 public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneBillService {
     private PhoneBill phonebill;
 
+    /**
+     * Adds a phone call to the phone bill on the server
+     *
+     * @param args the arguments for the phone call
+     * @return the new phone call that was added
+     * @throws RuntimeException if any of the arguments fail to parse
+     */
     @Override
     public AbstractPhoneCall addPhoneCall(Collection<String> args) throws RuntimeException {
         String customer = null;
@@ -69,6 +76,12 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
         return call;
     }
 
+    /**
+     * Retrieves the phone bill from the server
+     *
+     * @return the phone bill
+     * @throws RuntimeException if the phone bill is null
+     */
     @Override
     public AbstractPhoneBill getPhoneBill() throws RuntimeException{
         if (phonebill == null) {
@@ -77,6 +90,14 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
         return phonebill;
     }
 
+    /**
+     * Retrieves the calls that fall within a certain start date
+     *
+     * @param start the earliest the call an start by
+     * @param end   the latest the call can start by
+     * @return A collection of phone calls from within the range
+     * @throws RuntimeException If the dates fail to parse
+     */
     @Override
     public Collection<AbstractPhoneCall> getPhoneCallsWithinRange(String start, String end) throws RuntimeException {
         PhoneCallParser parser = new PhoneCallParser();

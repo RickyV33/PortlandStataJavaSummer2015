@@ -15,19 +15,43 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * A basic GWT class that makes sure that we can send an Phone Bill back from the server
+ * A basic GWT class that makes sure that sends phone calls back to the server, lets the user search for specific phone calls,
+ * and displays the entire phone bill.
  */
 public class PhoneBillGwt implements EntryPoint, ClickHandler {
+    /**
+     * Changes the view to addPhoneCallView that lets you add a phone call
+     */
     private Button addPhoneCallViewButton = new Button("Add Phone Call");
+    /**
+     * Changes the view to the phoneBillView that lets you display the entire phone bill in pretty text
+     */
     private Button phoneBillViewButton = new Button("View Phone Bill");
+    /**
+     * Changes the view to the searchPhoneCallView that lets you search for specific phone calls
+     */
     private Button searchPhoneCallViewButton = new Button("Search Phone Calls");
-    private Button readMeButton = new Button("Read me");
+    /**
+     * Holds the view that lets you add phone calls to a bill
+     */
     private AddPhoneCallView addPhoneCallView = new AddPhoneCallView();
+    /**
+     * Holds the view that lets you view your phone bill
+     */
     private PhoneBillView phoneBillView = new PhoneBillView();
+    /**
+     * Holds the view that lets you search for phone calls and display it
+     */
     private SearchCallsView searchCallsView = new SearchCallsView();
+    /**
+     * Holds the deck panel that lets you navigate between all the different views
+     */
     private DeckPanel viewPanel = new DeckPanel();
 
 
+    /**
+     * This is the main module that loads the web page.
+     */
     public void onModuleLoad() {
 
         viewPanel.add(addPhoneCallView);
@@ -36,12 +60,9 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
         addPhoneCallViewButton.addClickHandler(this);
         phoneBillViewButton.addClickHandler(this);
         searchPhoneCallViewButton.addClickHandler(this);
-        MenuBar readMeMenu = new MenuBar(true);
-        readMeMenu.addItem("Read me", displayReadMe());
-        MenuBar help = new MenuBar();
-        help.addItem("Help", readMeMenu);
+        MenuBar help = buildMenu();
 
-
+        //Add everything to the root panels
         RootPanel rootPanel = RootPanel.get("view-display");
         RootPanel.get("help-display").add(help);
         rootPanel.add(viewPanel);
@@ -50,6 +71,24 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
         viewPanel.showWidget(0);
     }
 
+    /**
+     * Builds the menu that has the README command in it
+     *
+     * @return the menu bar with help options
+     */
+    private MenuBar buildMenu() {
+        MenuBar readMeMenu = new MenuBar(true);
+        readMeMenu.addItem("Read me", displayReadMe());
+        MenuBar help = new MenuBar();
+        help.addItem("Help", readMeMenu);
+        return help;
+    }
+
+    /**
+     * Displays a window with the Read Me for the program.
+     *
+     * @return a command that executes the a window alert
+     */
     private Command displayReadMe() {
         return new Command() {
             public void execute() {
@@ -58,6 +97,11 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
         };
     }
 
+    /**
+     * The method that handles all the click events
+     *
+     * @param event the click event that will be handled
+     */
     public void onClick(ClickEvent event) {
         Widget sender = (Widget) event.getSource();
 
@@ -73,6 +117,11 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
         }
     }
 
+    /**
+     * Builds the buttons that transition to different views of the web page
+     *
+     * @return the horizontal panel that holds the buttons
+     */
     private HorizontalPanel buildButtons() {
         HorizontalPanel panel = new HorizontalPanel();
         panel.setSpacing(3);

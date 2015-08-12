@@ -15,15 +15,35 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * Created by Slick on 8/11/15.
+ * This class handles the search calls view that lets the user search for calls that start and within a specific range.
+ *
+ * @author Ricky Valencia
  */
 public class SearchCallsView extends Composite implements ClickHandler {
+    /**
+     * Takes in the data from the text boxes and searches for phone calls within that range
+     */
     private Button searchCallsButton = new Button("Search");
+    /**
+     * Clears all the text boxes
+     */
     private Button clearButton = new Button("Clear");
+    /**
+     * Holds the earliest the phone call can start by
+     */
     private TextBox startSearchTextBox = new TextBox();
+    /**
+     * Holds the latest the phone call can start by
+     */
     private TextBox endSearchTextBox = new TextBox();
+    /**
+     * Holds a list of all the phone calls
+     */
     private FlexTable table = new FlexTable();
 
+    /**
+     * Constructs a SearchCallsView object with all the proper widgets
+     */
     public SearchCallsView() {
         VerticalPanel panel = new VerticalPanel();
         HorizontalPanel input = new HorizontalPanel();
@@ -47,6 +67,11 @@ public class SearchCallsView extends Composite implements ClickHandler {
         initWidget(panel);
     }
 
+    /**
+     * Handles the click events that are sent from all the buttons in the program
+     *
+     * @param event the click event that is going to be handled
+     */
     public void onClick(ClickEvent event) {
         Widget sender = (Widget) event.getSource();
 
@@ -59,6 +84,10 @@ public class SearchCallsView extends Composite implements ClickHandler {
         }
     }
 
+    /**
+     * Called from the click handler that retrieves the phone calls from the server that are within the range from
+     * the text boxes.
+     */
     private void searchPhoneCalls() {
         if (checkSearchTextBoxes()) {
             Window.alert("Please fill in all the required fields.");
@@ -71,6 +100,12 @@ public class SearchCallsView extends Composite implements ClickHandler {
 
     }
 
+    /**
+     * The async call to the server that retrieves all the correct phone calls. If it fails then it will give an alert
+     * in a window
+     *
+     * @return the AsyncCallback object to be used by an async object
+     */
     private AsyncCallback<Collection<AbstractPhoneCall>> getPhoneCallsWithinRangeCallback() {
         return new AsyncCallback<Collection<AbstractPhoneCall>>() {
             @Override
@@ -82,7 +117,6 @@ public class SearchCallsView extends Composite implements ClickHandler {
 
             @Override
             public void onSuccess(Collection<AbstractPhoneCall> calls) {
-
                 if (calls.size() == 0) {
                     displayEmpty();
                 } else {
@@ -92,12 +126,20 @@ public class SearchCallsView extends Composite implements ClickHandler {
         };
     }
 
+    /**
+     * Displays a label stating that there were no phone calls that match a specific range in the table
+     */
     private void displayEmpty() {
         Label empty = new Label("There are no phone calls that match this search query.");
         empty.setStyleName("label");
         table.setWidget(0, 0, empty);
     }
 
+    /**
+     * DIsplays all the phone calls that matched the search query for the user
+     *
+     * @param calls the phone calls that were within the range specified by the user
+     */
     private void displaySearch(Collection<AbstractPhoneCall> calls) {
         int counter = 0;
         PrettyPrinter printer = new PrettyPrinter();
@@ -114,6 +156,11 @@ public class SearchCallsView extends Composite implements ClickHandler {
         }
     }
 
+    /**
+     * Builds all the labels for UI that will be alongside the text boxes
+     *
+     * @return the vertical panel that holds all the labels
+     */
     private VerticalPanel buildSearchLabels() {
         VerticalPanel panel = new VerticalPanel();
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -127,6 +174,11 @@ public class SearchCallsView extends Composite implements ClickHandler {
         return panel;
     }
 
+    /**
+     * Builds all the text boxes that will be alongside the labels
+     *
+     * @return the vertical panel that holds all the text boxes
+     */
     private VerticalPanel buildSearchTextBoxes() {
         VerticalPanel panel = new VerticalPanel();
         panel.setSpacing(8);
@@ -136,14 +188,28 @@ public class SearchCallsView extends Composite implements ClickHandler {
 
     }
 
+    /**
+     * Checks the text boxes to make sure they aren't empty
+     *
+     * @return true if they are all empty
+     */
     private boolean checkSearchTextBoxes() {
-        return (textBoxNotEmpty(startSearchTextBox) || textBoxNotEmpty(endSearchTextBox));
+        return (textBoxEmpty(startSearchTextBox) || textBoxEmpty(endSearchTextBox));
     }
 
-    private boolean textBoxNotEmpty(TextBox textBox) {
+    /**
+     * Checks the text in the text box argument to see if it's empty or null
+     *
+     * @param textBox the text box that is being checked if it's empty
+     * @return true if it is empty, false otherwise
+     */
+    private boolean textBoxEmpty(TextBox textBox) {
         return (textBox.getText() == null || textBox.getText().equals(""));
     }
 
+    /**
+     * Sets the focus to the first text box
+     */
     public void setFocus() {
         startSearchTextBox.setFocus(true);
     }
