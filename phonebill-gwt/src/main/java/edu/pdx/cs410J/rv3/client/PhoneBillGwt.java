@@ -92,7 +92,9 @@ public class PhoneBillGwt implements EntryPoint, ClickHandler {
     private Command displayReadMe() {
         return new Command() {
             public void execute() {
-                Window.alert("THIS IS THE README");
+                Window.alert("This website lets you manage an entire phone bill for one user. There are three separate views," +
+                        " one for adding phone calls, one for viewing the phone bill, and the last for searching for specific" +
+                        " phone calls that start within a specific time frame. Use the buttons to navigate to the different views.");
             }
         };
     }
